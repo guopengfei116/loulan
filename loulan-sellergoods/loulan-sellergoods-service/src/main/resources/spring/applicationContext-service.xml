@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:duboo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo
+       http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!--duboo服务端口，如果开启多个duboo，需要配置不同的端口防止占用-->
+    <duboo:protocol name="dubbo" port="20880"></duboo:protocol>
+    <!--应用名称，duboo负责做日志记录 -->
+    <duboo:application name="loulan-sellergoods-service"></duboo:application>
+    <!--duboo注册中心地址-->
+    <duboo:registry address="zookeeper://192.168.12.168:2181"></duboo:registry>
+    <!--duboo注解包扫描-->
+    <duboo:annotation package="com.loulan.sellergoods.service.impl"></duboo:annotation>
+</beans>
