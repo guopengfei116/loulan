@@ -3,6 +3,7 @@ package com.loulan.manage.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.loulan.pojo.TbBrand;
 import com.loulan.sellergoods.service.BrandService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,8 +17,9 @@ public class BrandController {
     @Reference
     private BrandService brandService;
 
-    @RequestMapping("/findAll")
-    public List<TbBrand> findAll() {
-        return brandService.findAll();
+    @GetMapping("/findAll")
+    public List<TbBrand> findAll(Integer page, Integer rows) {
+        return brandService.findAll(page, rows);
     }
+
 }

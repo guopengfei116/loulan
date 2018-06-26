@@ -1,6 +1,7 @@
 package com.loulan.sellergoods.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.PageHelper;
 import com.loulan.mapper.BrandMapper;
 import com.loulan.pojo.TbBrand;
 import com.loulan.sellergoods.service.BrandService;
@@ -16,7 +17,8 @@ public class BrandServiceImpl implements BrandService {
     private BrandMapper brandMapper;
 
     @Override
-    public List<TbBrand> findAll() {
+    public List<TbBrand> findAll(Integer page, Integer rows) {
+        PageHelper.startPage(page, rows);
         return brandMapper.findAll();
     }
 }
