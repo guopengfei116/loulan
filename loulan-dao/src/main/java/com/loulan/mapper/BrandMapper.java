@@ -1,11 +1,11 @@
 package com.loulan.mapper;
 
 import com.loulan.pojo.TbBrand;
+import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 
-public interface BrandMapper {
+public interface BrandMapper extends Mapper<TbBrand> {
 
-    public List<TbBrand> findAll();
-
+    List<TbBrand> findAll();
 }

@@ -17,6 +17,7 @@
             <artifactId>loulan-pojo</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
@@ -25,6 +26,7 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
         </dependency>
+
         <!-- Mybatis -->
         <dependency>
             <groupId>org.mybatis</groupId>
@@ -40,10 +42,11 @@
             <artifactId>pagehelper</artifactId>
         </dependency>
         <!-- 通用Mapper -->
-        <!--<dependency>-->
-            <!--<groupId>tk.mybatis</groupId>-->
-            <!--<artifactId>mapper</artifactId>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper</artifactId>
+        </dependency>
+
         <!-- MySql -->
         <dependency>
             <groupId>mysql</groupId>
@@ -54,6 +57,7 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
         </dependency>
+
         <!-- 日志 -->
         <dependency>
             <groupId>org.slf4j</groupId>

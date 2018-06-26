@@ -13,6 +13,7 @@
         <module>loulan-dao</module>
         <module>loulan-sellergoods</module>
         <module>loulan-manage-web</module>
+        <module>loulan-common-service</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -35,7 +36,7 @@
         <mysql.version>5.1.32</mysql.version>
         <druid.version>1.1.5</druid.version>
         <pagehelper.version>5.1.2</pagehelper.version>
-        <com.loulan.mapper.version>3.5.0</com.loulan.mapper.version>
+        <mapper.version>3.5.0</mapper.version>
         <dubbo.version>2.6.0</dubbo.version>
         <slf4j.version>1.7.12</slf4j.version>
         <javax.persistence.version>1.0</javax.persistence.version>
@@ -167,8 +168,8 @@
             <!-- 通用Mapper -->
             <dependency>
                 <groupId>tk.mybatis</groupId>
-                <artifactId>com.loulan.mapper</artifactId>
-                <version>${com.loulan.mapper.version}</version>
+                <artifactId>mapper</artifactId>
+                <version>${mapper.version}</version>
             </dependency>
             <!-- MySql -->
             <dependency>
