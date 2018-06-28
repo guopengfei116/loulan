@@ -63,6 +63,7 @@ public class BaseServiceImpl<T> implements BaseService<T> {
 
     /**
      * 分页条件查询
+     * 通过反射获取实体属性，全部使用like模糊查询
      *
      * @param page  页码
      * @param size  每页大小

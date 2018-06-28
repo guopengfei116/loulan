@@ -18,6 +18,10 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
+    <mvc:cors>
+        <mvc:mapping path="/**"></mvc:mapping>
+    </mvc:cors>
+
     <!--应用名称，duboo负责做日志记录-->
     <dubbo:application name="loulan-manage-web"></dubbo:application>
     <!--duboo注册中心地址-->
