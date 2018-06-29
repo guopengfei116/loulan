@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface BrandMapper extends Mapper<TbBrand> {
 
-    List<TbBrand> findAll();
 }
