@@ -1,12 +1,16 @@
 package com.loulan.manage.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.loulan.pojo.TbBrand;
 import com.loulan.pojo.TbSpecification;
 import com.loulan.sellergoods.service.SpecificationService;
 import com.loulan.vo.HttpResult;
 import com.loulan.vo.PageResult;
 import com.loulan.vo.Specification;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/specification")
 @RestController
@@ -15,11 +19,17 @@ public class SpecificationController {
     @Reference
     private SpecificationService specificationService;
 
-    // 分页获取
+    // 全部
+    @GetMapping("/findAll")
+    public List<TbSpecification> findAll() {
+        return specificationService.findAll();
+    }
+
+    // 条件分页
     @PostMapping("/search")
-    public PageResult search(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                             @RequestParam(value = "rows", defaultValue = "10") Integer size,
-                             @RequestBody  TbSpecification specification) {
+    public PageResult search(@RequestParam(defaultValue = "1") Integer page,
+                             @RequestParam(defaultValue = "10") Integer size,
+                             @RequestBody(required = false)  TbSpecification specification) {
         return specificationService.searchPage(page, size, specification);
     }
 
@@ -75,6 +85,12 @@ public class SpecificationController {
         }
 
         return httpResult;
+    }
+
+    // 下拉菜单
+    @GetMapping("/selectOptionList")
+    public List<Map<String, String>> selectOptionList() {
+        return specificationService.selectOptionList();
     }
 
 }

@@ -7,6 +7,7 @@ import com.loulan.vo.Specification;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 public interface SpecificationService extends BaseService<TbSpecification> {
 
@@ -39,5 +40,10 @@ public interface SpecificationService extends BaseService<TbSpecification> {
      * 删除
      * */
     void deleteByIds(Serializable[] ids);
+
+    /**
+     * 规格下拉列表
+     * */
+    List<Map<String, String>> selectOptionList();
 
 }

@@ -1,6 +1,7 @@
 package com.loulan.service;
 
 import com.loulan.vo.PageResult;
+import tk.mybatis.mapper.entity.Example;
 
 import java.io.Serializable;
 import java.util.List;
@@ -48,6 +49,15 @@ public interface BaseService<T> {
      * @return 分页实体对象
      * */
     PageResult findPage(Integer page, Integer size, T query);
+
+    /**
+     * 分页搜索
+     *
+     * @param page 页码
+     * @param size 每页数量
+     * @param example 条件对象
+     */
+    PageResult searchPage(Integer page, Integer size, Example example);
 
     /**
      * 添加实体

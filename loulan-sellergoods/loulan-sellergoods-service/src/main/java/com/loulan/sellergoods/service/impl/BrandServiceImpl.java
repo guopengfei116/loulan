@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+import java.util.Map;
 
 // 使用阿里巴巴的注解注册服务
 @Service(interfaceClass = BrandService.class)
@@ -61,5 +62,13 @@ public class BrandServiceImpl extends BaseServiceImpl<TbBrand> implements BrandS
         PageInfo<TbBrand> pageInfo = new PageInfo<>(list);
 
         return new PageResult(pageInfo.getTotal(), pageInfo.getList());
+    }
+
+    /**
+     * 品牌下拉列表
+     */
+    @Override
+    public List<Map<String, String>> selectOptionList() {
+        return brandMapper.selectOptionList();
     }
 }

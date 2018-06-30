@@ -6,6 +6,7 @@ import com.loulan.service.BaseService;
 import com.loulan.vo.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.common.Mapper;
+import tk.mybatis.mapper.entity.Example;
 
 import java.io.Serializable;
 import java.util.List;
@@ -75,6 +76,27 @@ public class BaseServiceImpl<T> implements BaseService<T> {
         PageHelper.startPage(page, size);
         List<T> list = mapper.select(query);
         PageInfo<T> pageInfo = new PageInfo<>(list);
+        return new PageResult(pageInfo.getTotal(), pageInfo.getList());
+    }
+
+    /**
+     * 分页搜索
+     *
+     * @param page 页码
+     * @param size 每页数量
+     * @param example 条件对象
+     */
+    @Override
+    public PageResult searchPage(Integer page, Integer size, Example example) {
+        // 设置分页
+        PageHelper.startPage(page, size);
+
+        // 分页查询
+        List<T> list = mapper.selectByExample(example);
+
+        // 获取分页相关信息
+        PageInfo<T> pageInfo = new PageInfo<>(list);
+
         return new PageResult(pageInfo.getTotal(), pageInfo.getList());
     }
 

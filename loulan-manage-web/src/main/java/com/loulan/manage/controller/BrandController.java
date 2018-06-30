@@ -7,6 +7,9 @@ import com.loulan.vo.HttpResult;
 import com.loulan.vo.PageResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/brand")
 public class BrandController {
@@ -15,18 +18,24 @@ public class BrandController {
     @Reference
     private BrandService brandService;
 
-    // 分页获取
-    @RequestMapping("/findPage")
+    // 全部
+    @GetMapping("/findAll")
+    public List<TbBrand> findAll() {
+        return brandService.findAll();
+    }
+
+    // 分页
+    @GetMapping("/findPage")
     public PageResult findPage(@RequestParam(defaultValue = "1") Integer page,
                                @RequestParam(defaultValue = "10") Integer size) {
         return brandService.findPage(page, size);
     }
 
-    // 分页条件获取
-    @RequestMapping("/search")
+    // 条件分页
+    @PostMapping("/search")
     public PageResult findPage(@RequestParam(defaultValue = "1") Integer page,
                                @RequestParam(defaultValue = "10") Integer size,
-                               @RequestBody TbBrand brand) {
+                               @RequestBody(required = false) TbBrand brand) {
         return brandService.searchPage(page, size, brand);
     }
 
@@ -83,5 +92,11 @@ public class BrandController {
         }
 
         return httpResult;
+    }
+
+    // 下拉菜单
+    @GetMapping("/selectOptionList")
+    public List<Map<String, String>> selectOptionList() {
+        return brandService.selectOptionList();
     }
 }

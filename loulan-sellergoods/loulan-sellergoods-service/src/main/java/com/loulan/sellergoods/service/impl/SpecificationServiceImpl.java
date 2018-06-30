@@ -18,6 +18,7 @@ import tk.mybatis.mapper.entity.Example;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Service(interfaceClass = SpecificationService.class)
 public class SpecificationServiceImpl extends BaseServiceImpl<TbSpecification> implements SpecificationService {
@@ -71,7 +72,7 @@ public class SpecificationServiceImpl extends BaseServiceImpl<TbSpecification> i
     /**
      * 主键查找
      *
-     * @param id
+     * @param id 主键
      */
     @Override
     public Specification findOne(Long id) {
@@ -89,7 +90,7 @@ public class SpecificationServiceImpl extends BaseServiceImpl<TbSpecification> i
 
     /**
      * 添加
-     *  @param specification
+     *  @param specification 规格包装对象，包含规格和规格选项
      * */
     @Override
     public void add(Specification specification) {
@@ -110,7 +111,7 @@ public class SpecificationServiceImpl extends BaseServiceImpl<TbSpecification> i
     /**
      * 更新
      *
-     * @param specification
+     * @param specification 规格包装对象，包含规格和规格选项
      */
     @Override
     public void update(Specification specification) {
@@ -135,7 +136,7 @@ public class SpecificationServiceImpl extends BaseServiceImpl<TbSpecification> i
     /**
      * 删除
      *
-     * @param ids
+     * @param ids 规格ID列表
      */
     @Override
     public void deleteByIds(Serializable[] ids) {
@@ -147,6 +148,14 @@ public class SpecificationServiceImpl extends BaseServiceImpl<TbSpecification> i
         Example.Criteria criteria = example.createCriteria();
         criteria.andIn("specId", Arrays.asList(ids));
         specificationOptionMapper.deleteByExample(example);
+    }
+
+    /**
+     * 规格下拉列表
+     */
+    @Override
+    public List<Map<String, String>> selectOptionList() {
+        return specificationMapper.selectOptionList();
     }
 
 }
