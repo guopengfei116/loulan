@@ -61,6 +61,9 @@ public class TbSeller implements Serializable {
 
     private String bankAccount;
 
+    public TbSeller() {
+    }
+
     private static final long serialVersionUID = 1L;
 
     public String getSellerId() {
