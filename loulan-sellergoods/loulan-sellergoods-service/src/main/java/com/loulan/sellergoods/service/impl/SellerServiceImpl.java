@@ -64,4 +64,26 @@ public class SellerServiceImpl extends BaseServiceImpl<TbSeller> implements Sell
 
         sellerMapper.updateByPrimaryKeySelective(seller);
     }
+
+    /**
+     * 添加商家，新入驻商家初始状态强制为0
+     *
+     * @param seller 实体对象
+     * */
+    @Override
+    public void add(TbSeller seller) {
+        seller.setStatus("0");
+        super.add(seller);
+    }
+
+    /**
+     * 更新商家信息，更新时不能让商家任意修改状态
+     *
+     * @param seller 实体对象
+     * */
+    @Override
+    public void update(TbSeller seller) {
+        seller.setStatus(null);
+        super.update(seller);
+    }
 }
