@@ -31,13 +31,13 @@ public class SellerServiceImpl extends BaseServiceImpl<TbSeller> implements Sell
             // 搜索条件，商家名称，店铺名称，状态
             Example.Criteria criteria = example.createCriteria();
             if (!StringUtils.isEmpty(query.getName())) {
-                criteria.andLike("name", query.getName());
+                criteria.andLike("name", "%" + query.getName() + "%");
             }
             if (!StringUtils.isEmpty(query.getNickName())) {
                 criteria.andLike("nickName", "%" + query.getNickName() + "%");
             }
             if (!StringUtils.isEmpty(query.getStatus())) {
-                criteria.andEqualTo("status", "%" + query.getStatus() + "%");
+                criteria.andEqualTo("status", query.getStatus());
             }
 
             return super.searchPage(page, size, example);

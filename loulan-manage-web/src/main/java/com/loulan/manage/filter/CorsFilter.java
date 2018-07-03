@@ -3,7 +3,10 @@ package com.loulan.manage.filter;
 import com.loulan.manage.session.AuthenticationUserSessionContext;
 
 import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -35,9 +38,13 @@ public class CorsFilter implements Filter {
     /**
      * 添加跨域响应头
      * */
-    private void addCorsHeader(HttpServletResponse resp) {
+    private void addCorsHeader(HttpServletResponse resp, HttpServletRequest req) {
+        // 动态获取远程域名，进行跨域配置
+        String origin = req.getHeader("Origin");
+        String remote = req.getRemoteHost() + ":" + req.getRemotePort();
+
         // 允许跨域资源访问
-        resp.setHeader("Access-Control-Allow-Origin", allowOrigin);
+        resp.setHeader("Access-Control-Allow-Origin", origin != null? origin: remote);
         resp.setHeader("Access-Control-Allow-Methods", allowMethods);
         String headers = Arrays.toString(allowHeaders);
         resp.setHeader("Access-Control-Allow-Headers", headers.substring(0, headers.length() - 1).substring(1));
@@ -60,7 +67,8 @@ public class CorsFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
 
-        addCorsHeader(resp);
+        // 跨域处理
+        addCorsHeader(resp, req);
 
         // options请求,添加跨域响应头后直接返回200
         if("OPTIONS".equals(req.getMethod())) {

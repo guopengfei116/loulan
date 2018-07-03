@@ -32,14 +32,9 @@ public class SellerController {
     public HttpResult updateStatus(String id, String status) {
         HttpResult httpResult;
 
-        // 实体创建
-        TbSeller seller = new TbSeller();
-        seller.setSellerId(id);
-        seller.setStatus(status);
-
         // 通过更新方法修改状态
         try {
-            sellerService.update(seller);
+            sellerService.updateStatus(id, status);
             httpResult = HttpResult.ok("修改成功");
         }catch (Exception e) {
             e.printStackTrace();
