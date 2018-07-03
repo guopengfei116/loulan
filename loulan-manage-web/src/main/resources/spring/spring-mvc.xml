@@ -13,19 +13,19 @@
     <mvc:annotation-driven>
         <mvc:message-converters register-defaults="true">
             <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
-                <property name="supportedMediaTypes" value="application/json"></property>
+                <property name="supportedMediaTypes" value="application/json"/>
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
 
     <mvc:cors>
-        <mvc:mapping path="/**"></mvc:mapping>
+        <mvc:mapping path="/**"/>
     </mvc:cors>
 
     <!--应用名称，duboo负责做日志记录-->
-    <dubbo:application name="loulan-manage-web"></dubbo:application>
+    <dubbo:application name="loulan-manage-web"/>
     <!--duboo注册中心地址-->
-    <dubbo:registry address="zookeeper://192.168.12.168:2181"></dubbo:registry>
+    <dubbo:registry address="zookeeper://192.168.12.168:2181"/>
     <!--duboo注解包扫描-->
-    <dubbo:annotation package="com.loulan.manage.controller"></dubbo:annotation>
+    <dubbo:annotation package="com.loulan.manage.controller"/>
 </beans>

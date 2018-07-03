@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!--拦截白名单-->
+    <http pattern="/css/**" security="none"/>
+    <http pattern="/js/**" security="none"/>
+    <http pattern="/img/**" security="none"/>
+
+    <!--配置角色权限-->
+    <http use-expressions="false">
+        <!--添加ROLE_USER权限-->
+        <intercept-url pattern="/**" access="ROLE_USER"/>
+
+        <!--禁止跨站请求伪造-->
+        <csrf disabled="true"/>
+
+        <!--退出功能-->
+        <logout/>
+    </http>
+
+    <!--给用户授权-->
+    <authentication-manager>
+        <authentication-provider>
+            <user-service>
+                <user authorities="ROLE_USER" name="feifei" password="123456"/>
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
+
+</beans:beans>

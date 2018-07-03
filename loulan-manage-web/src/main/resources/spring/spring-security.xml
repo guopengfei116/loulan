@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!--自定义登陆成功失败处理器-->
+    <bean id="authenticationSuccessHandler" class="com.loulan.manage.security.AuthenticationSuccessHandler"/>
+    <bean id="authenticationFailureHandler" class="com.loulan.manage.security.AuthenticationFailureHandler"/>
+    <bean id="accessDeniedHandler" class="com.loulan.manage.security.CustomAccessDeniedHandler"/>
+    <bean id="authenticationEntryPoint" class="com.loulan.manage.security.CustomAuthenticationEntryPoint"/>
+
+    <!--拦截白名单-->
+    <security:http pattern="/css/**" security="none"/>
+    <security:http pattern="/js/**" security="none"/>
+    <security:http pattern="/img/**" security="none"/>
+    <security:http pattern="/brand/**" security="none"/>
+
+    <!--配置角色权限-->
+    <security:http use-expressions="false" disable-url-rewriting="true" entry-point-ref="authenticationEntryPoint">
+        <!--添加ROLE_USER权限-->
+        <security:intercept-url pattern="/**" access="ROLE_USER"/>
+
+        <!--禁止跨站请求伪造-->
+        <security:csrf disabled="true"/>
+
+        <!--访问资源无授权后的处理器-->
+        <security:access-denied-handler ref="accessDeniedHandler"/>
+
+        <!--经测试必须配置，否则会报错-->
+        <security:form-login
+            always-use-default-target="false"
+            authentication-success-handler-ref="authenticationSuccessHandler"
+            authentication-failure-handler-ref="authenticationFailureHandler"
+        />
+        <!--登陆页面-->
+        <!--<security:form-login login-page="http://localhost:9527/example-seller/admin/login.html"/>-->
+        <!--自定义登陆接口，需要自己实现登录方法-->
+        <!--<security:form-login login-processing-url="/user/login.do"/>-->
+
+        <!--退出功能-->
+        <security:logout/>
+    </security:http>
+
+    <!--认证器-->
+    <security:authentication-manager>
+        <!--认证提供者-->
+        <security:authentication-provider>
+            <security:user-service>
+                <!--认证用户权限-->
+                <security:user authorities="ROLE_USER" name="feifei" password="123456"/>
+            </security:user-service>
+        </security:authentication-provider>
+    </security:authentication-manager>
+</beans>
