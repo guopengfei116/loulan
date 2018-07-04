@@ -49,12 +49,13 @@ public class BrandServiceImpl extends BaseServiceImpl<TbBrand> implements BrandS
     }
 
     /**
-     * 品牌下拉列表
+     * 实体下拉列表
      *
-     * @return 规格id与name(as text)构成的集合：[ {id, text}, {id, text}, ... ]
+     * @return 实体id与name(as text)构成的集合：[ {id, text}, {id, text}, ... ]
      */
     @Override
     public List<Map<String, String>> selectOptionList() {
         return brandMapper.selectOptionList();
     }
+
 }

@@ -9,7 +9,7 @@ import java.util.List;
 public interface BaseService<T> {
 
     /**
-     * 根据主键查
+     * 主键查询
      *
      * @param  id  主键
      * @return     实体对象

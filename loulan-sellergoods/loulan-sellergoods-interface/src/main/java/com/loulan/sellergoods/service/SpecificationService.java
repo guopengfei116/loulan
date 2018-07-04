@@ -32,9 +32,9 @@ public interface SpecificationService extends BaseService<TbSpecification> {
     void update(Specification t);
 
     /**
-     * 规格下拉列表
+     * 实体下拉列表
      *
-     * @return 规格id与name构成的集合：[ {id, specName}, {id, specName}, ... ]
+     * @return 实体id与specName(as text)构成的集合：[ {id, text}, {id, text}, ... ]
      */
     List<Map<String, String>> selectOptionList();
 

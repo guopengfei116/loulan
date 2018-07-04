@@ -28,31 +28,6 @@ public class SpecificationServiceImpl extends BaseServiceImpl<TbSpecification> i
     private SpecificationOptionMapper specificationOptionMapper;
 
     /**
-     * 分页sql条件查询
-     *
-     * @param  page  页码
-     * @param  size  页大小
-     * @param  t     实体对象，封装了查询条件
-     * @return       分页实体对象
-     */
-    @Override
-    public PageResult findPageByWhere(Integer page, Integer size, TbSpecification t) {
-        /*
-         * 1. 创建条件对象
-         * 2. 添加 specName like 条件
-         * 3. 调用父类方法分页查询
-         * */
-        Example example = new Example(TbSpecification.class);
-        Example.Criteria criteria = example.createCriteria();
-
-        if(!StringUtils.isEmpty(t.getSpecName())) {
-            criteria.andLike("specName", "%" + t.getSpecName() + "%");
-        }
-
-        return super.findPageByWhere(page, size, example);
-    }
-
-    /**
      * 主键查询
      *
      * @param id 规格主键
@@ -76,6 +51,31 @@ public class SpecificationServiceImpl extends BaseServiceImpl<TbSpecification> i
         List<TbSpecificationOption> optionList = specificationOptionMapper.selectByExample(example);
 
         return new Specification(spec, optionList);
+    }
+
+    /**
+     * 分页sql条件查询
+     *
+     * @param  page  页码
+     * @param  size  页大小
+     * @param  t     实体对象，封装了查询条件
+     * @return       分页实体对象
+     */
+    @Override
+    public PageResult findPageByWhere(Integer page, Integer size, TbSpecification t) {
+        /*
+         * 1. 创建条件对象
+         * 2. 添加 specName like 条件
+         * 3. 调用父类方法分页查询
+         * */
+        Example example = new Example(TbSpecification.class);
+        Example.Criteria criteria = example.createCriteria();
+
+        if(!StringUtils.isEmpty(t.getSpecName())) {
+            criteria.andLike("specName", "%" + t.getSpecName() + "%");
+        }
+
+        return super.findPageByWhere(page, size, example);
     }
 
     /**
@@ -169,9 +169,9 @@ public class SpecificationServiceImpl extends BaseServiceImpl<TbSpecification> i
     }
 
     /**
-     * 规格下拉列表
+     * 实体下拉列表
      *
-     * @return 规格id与name构成的集合：[ {id, specName}, {id, specName}, ... ]
+     * @return 实体id与specName(as text)构成的集合：[ {id, text}, {id, text}, ... ]
      */
     @Override
     public List<Map<String, String>> selectOptionList() {

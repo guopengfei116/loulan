@@ -19,49 +19,44 @@ public class SpecificationController {
     @Reference
     private SpecificationService specificationService;
 
-    // 全部
-    @GetMapping("/findAll")
-    public List<TbSpecification> findAll() {
-        return specificationService.findAll();
-    }
-
-    // 条件分页
-    @PostMapping("/search")
-    public PageResult search(@RequestParam(defaultValue = "1") Integer page,
-                             @RequestParam(defaultValue = "10") Integer size,
-                             @RequestBody(required = false)  TbSpecification specification) {
-        return specificationService.findPageByWhere(page, size, specification);
-    }
-
-    // 通过主键查询
+    /**
+     * 主键查询
+     *
+     * @param  id  主键
+     * @return     实体对象
+     * */
     @GetMapping("/findOne")
     public Specification findOne(Long id) {
         return specificationService.findOne(id);
     }
 
-    // 更新
-    @PostMapping("/update")
-    public HttpResult update(@RequestBody Specification specification) {
-        HttpResult httpResult;
-
-        try {
-            specificationService.update(specification);
-            httpResult = HttpResult.ok("修改成功");
-        }catch (Exception e) {
-            e.printStackTrace();
-            httpResult = HttpResult.fail("修改失败");
-        }
-
-        return httpResult;
+    /**
+     * 分页sql条件查询
+     *
+     * @param  page   页码
+     * @param  size   页大小
+     * @param  t      实体对象，封装了查询条件
+     * @return        分页实体对象
+     * */
+    @PostMapping("/findPageByWhere")
+    public PageResult findPageByWhere(@RequestParam(defaultValue = "1") Integer page,
+                                      @RequestParam(defaultValue = "10") Integer size,
+                                      @RequestBody(required = false)  TbSpecification t) {
+        return specificationService.findPageByWhere(page, size, t);
     }
 
-    // 添加
-    @PostMapping("/add")
-    public HttpResult add(@RequestBody Specification specification) {
+    /**
+     * 添加
+     *
+     * @param  t  实体对象
+     * @return    执行结果对象
+     * */
+    @PutMapping("/add")
+    public HttpResult add(@RequestBody Specification t) {
         HttpResult httpResult;
 
         try {
-            specificationService.add(specification);
+            specificationService.add(t);
             httpResult = HttpResult.ok("添加成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -71,9 +66,35 @@ public class SpecificationController {
         return httpResult;
     }
 
-    // 删除
-    @GetMapping("/deleteByIds")
-    public HttpResult deleteByIds(@RequestParam("ids") Long[] ids) {
+    /**
+     * 修改
+     *
+     * @param  t  实体对象
+     * @return    执行结果对象
+     * */
+    @PostMapping("/update")
+    public HttpResult update(@RequestBody Specification t) {
+        HttpResult httpResult;
+
+        try {
+            specificationService.update(t);
+            httpResult = HttpResult.ok("修改成功");
+        }catch (Exception e) {
+            e.printStackTrace();
+            httpResult = HttpResult.fail("修改失败");
+        }
+
+        return httpResult;
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param  ids  主键集合
+     * @return      执行结果对象
+     * */
+    @DeleteMapping("deleteMore")
+    public HttpResult deleteMore(@RequestParam("ids") Long[] ids) {
         HttpResult httpResult;
 
         try {

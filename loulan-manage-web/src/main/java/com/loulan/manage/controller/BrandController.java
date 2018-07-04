@@ -14,61 +14,48 @@ import java.util.Map;
 @RequestMapping("/brand")
 public class BrandController {
 
-    // 使用duboo服务
     @Reference
     private BrandService brandService;
 
-    // 全部
-    @GetMapping("/findAll")
-    public List<TbBrand> findAll() {
-        return brandService.findAll();
-    }
-
-    // 分页
-    @GetMapping("/findPage")
-    public PageResult findPage(@RequestParam(defaultValue = "1") Integer page,
-                               @RequestParam(defaultValue = "10") Integer size) {
-        return brandService.findPage(page, size);
-    }
-
-    // 条件分页
-    @PostMapping("/search")
-    public PageResult findPage(@RequestParam(defaultValue = "1") Integer page,
-                               @RequestParam(defaultValue = "10") Integer size,
-                               @RequestBody(required = false) TbBrand brand) {
-        return brandService.findPageByWhere(page, size, brand);
-    }
-
-    // 查询一个
-    // 这里接受的ID参数必须为Long类型，因为实体类中为Long类型，Serializable会按照类型序列化
+    /**
+     * 主键查询
+     * 这里接受的ID参数必须为Long类型，因为实体类中为Long类型，Serializable会按照类型序列化
+     *
+     * @param  id  主键
+     * @return     实体对象
+     * */
     @GetMapping("/findOne")
     public TbBrand findOne(@RequestParam("id") Long id) {
         return brandService.findOne(id);
     }
 
-    // 更新
-    @PostMapping("/update")
-    public HttpResult update(@RequestBody TbBrand brand) {
-        HttpResult httpResult;
-
-        try {
-            brandService.update(brand);
-            httpResult = HttpResult.ok("修改成功");
-        }catch (Exception e) {
-            e.printStackTrace();
-            httpResult = HttpResult.fail("修改失败");
-        }
-
-        return httpResult;
+    /**
+     * 分页sql条件查询
+     *
+     * @param  page   页码
+     * @param  size   页大小
+     * @param  t      实体对象，封装了查询条件
+     * @return        分页实体对象
+     * */
+    @PostMapping("/findPageByWhere")
+    public PageResult findPageByWhere(@RequestParam(defaultValue = "1") Integer page,
+                                      @RequestParam(defaultValue = "10") Integer size,
+                                      @RequestBody(required = false) TbBrand t) {
+        return brandService.findPageByWhere(page, size, t);
     }
 
-    // 添加
-    @PostMapping("/add")
-    public HttpResult add(@RequestBody TbBrand brand) {
+    /**
+     * 添加
+     *
+     * @param  t  实体对象
+     * @return    执行结果对象
+     * */
+    @PutMapping("/add")
+    public HttpResult add(@RequestBody TbBrand t) {
         HttpResult httpResult;
 
         try {
-            brandService.add(brand);
+            brandService.add(t);
             httpResult = HttpResult.ok("添加成功");
         }catch (Exception e) {
             e.printStackTrace();
@@ -78,9 +65,35 @@ public class BrandController {
         return httpResult;
     }
 
-    // 批量删除
-    @GetMapping("deleteByIds")
-    public HttpResult deleteByIds(@RequestParam("ids") Long[] ids) {
+    /**
+     * 修改
+     *
+     * @param  t  实体对象
+     * @return    执行结果对象
+     * */
+    @PostMapping("/update")
+    public HttpResult update(@RequestBody TbBrand t) {
+        HttpResult httpResult;
+
+        try {
+            brandService.update(t);
+            httpResult = HttpResult.ok("修改成功");
+        }catch (Exception e) {
+            e.printStackTrace();
+            httpResult = HttpResult.fail("修改失败");
+        }
+
+        return httpResult;
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param  ids  主键集合
+     * @return      执行结果对象
+     * */
+    @DeleteMapping("deleteMore")
+    public HttpResult deleteMore(@RequestParam("ids") Long[] ids) {
         HttpResult httpResult;
 
         try {
@@ -94,9 +107,14 @@ public class BrandController {
         return httpResult;
     }
 
-    // 下拉菜单
+    /**
+     * 实体下拉列表
+     *
+     * @return 实体id与name(as text)构成的集合：[ {id, text}, {id, text}, ... ]
+     */
     @GetMapping("/selectOptionList")
     public List<Map<String, String>> selectOptionList() {
         return brandService.selectOptionList();
     }
+
 }

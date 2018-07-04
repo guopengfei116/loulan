@@ -21,11 +21,11 @@ public class BaseServiceImpl<T> implements BaseService<T> {
     private Mapper<T> mapper;
 
     /**
-     * 根据主键查
+     * 主键查询
      *
      * @param  id  主键
      * @return     实体对象
-     */
+     * */
     @Override
     public T findOne(Serializable id) {
         return mapper.selectByPrimaryKey(id);

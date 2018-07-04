@@ -1,15 +1,23 @@
 package com.loulan.sellergoods.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.loulan.mapper.TypeTemplateMapper;
 import com.loulan.pojo.TbTypeTemplate;
 import com.loulan.sellergoods.service.TypeTemplateService;
 import com.loulan.service.impl.BaseServiceImpl;
 import com.loulan.vo.PageResult;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
+import java.util.Map;
 
 @Service(interfaceClass = TypeTemplateService.class)
 public class TypeTemplateServiceImpl extends BaseServiceImpl<TbTypeTemplate> implements TypeTemplateService {
+
+    @Autowired
+    private TypeTemplateMapper typeTemplateMapper;
 
     /**
      * 分页sql条件查询
@@ -34,6 +42,16 @@ public class TypeTemplateServiceImpl extends BaseServiceImpl<TbTypeTemplate> imp
         }
 
         return super.findPageByWhere(page, size, example);
+    }
+
+    /**
+     * 实体下拉列表
+     *
+     * @return 实体id与name(as text)构成的集合：[ {id, text}, {id, text}, ... ]
+     */
+    @Override
+    public List<Map<String, String>> selectOptionList() {
+        return typeTemplateMapper.selectOptionList();
     }
 
 }

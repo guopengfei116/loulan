@@ -14,12 +14,19 @@ public class SellerController {
     @Reference
     private SellerService sellerService;
 
-    // 条件分页
-    @RequestMapping("/search")
-    public PageResult search(@RequestParam(defaultValue = "1") Integer page,
-                             @RequestParam(defaultValue = "10") Integer size,
-                             @RequestBody(required = false) TbSeller seller) {
-        return sellerService.findPageByWhere(page, size, seller);
+    /**
+     * 分页sql条件查询
+     *
+     * @param  page   页码
+     * @param  size   页大小
+     * @param  t      实体对象，封装了查询条件
+     * @return        分页实体对象
+     * */
+    @PostMapping("/findPageByWhere")
+    public PageResult findPageByWhere(@RequestParam(defaultValue = "1") Integer page,
+                                      @RequestParam(defaultValue = "10") Integer size,
+                                      @RequestBody(required = false) TbSeller t) {
+        return sellerService.findPageByWhere(page, size, t);
     }
 
     /**
@@ -28,7 +35,7 @@ public class SellerController {
      * @param id 主键
      * @param status   状态，0：未审核 1：已审核 2：审核未通过 3：关闭
      */
-    @RequestMapping("/updateStatus")
+    @GetMapping("/updateStatus")
     public HttpResult updateStatus(String id, String status) {
         HttpResult httpResult;
 

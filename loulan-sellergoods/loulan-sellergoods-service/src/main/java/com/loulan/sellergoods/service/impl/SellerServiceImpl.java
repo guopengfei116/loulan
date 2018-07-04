@@ -50,6 +50,19 @@ public class SellerServiceImpl extends BaseServiceImpl<TbSeller> implements Sell
     }
 
     /**
+     * 添加商家
+     * 新入驻商家初始为未审核，强制设status为0
+     * 状态，0：未审核 1：已审核 2：审核未通过 3：关闭
+     *
+     * @param t 实体对象
+     * */
+    @Override
+    public void add(TbSeller t) {
+        t.setStatus("0");
+        super.add(t);
+    }
+
+    /**
      * 更新状态
      *
      * @param id     主键
@@ -66,19 +79,6 @@ public class SellerServiceImpl extends BaseServiceImpl<TbSeller> implements Sell
         seller.setStatus(status);
 
         sellerMapper.updateByPrimaryKeySelective(seller);
-    }
-
-    /**
-     * 添加商家
-     * 新入驻商家初始为未审核，强制设status为0
-     * 状态，0：未审核 1：已审核 2：审核未通过 3：关闭
-     *
-     * @param t 实体对象
-     * */
-    @Override
-    public void add(TbSeller t) {
-        t.setStatus("0");
-        super.add(t);
     }
 
 }
