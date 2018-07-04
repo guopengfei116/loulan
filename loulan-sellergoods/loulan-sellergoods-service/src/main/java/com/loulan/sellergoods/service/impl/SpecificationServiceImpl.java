@@ -1,8 +1,6 @@
 package com.loulan.sellergoods.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.loulan.mapper.SpecificationMapper;
 import com.loulan.mapper.SpecificationOptionMapper;
 import com.loulan.pojo.TbSpecification;
@@ -30,56 +28,48 @@ public class SpecificationServiceImpl extends BaseServiceImpl<TbSpecification> i
     private SpecificationOptionMapper specificationOptionMapper;
 
     /**
-     * 搜索
+     * 分页sql条件查询
      *
-     * @param query 品牌查询实体
+     * @param  page  页码
+     * @param  size  页大小
+     * @param  t     实体对象，封装了查询条件
+     * @return       分页实体对象
      */
     @Override
-    public List<TbSpecification> search(TbSpecification query) {
-        // 创建自定义sql条件
+    public PageResult findPageByWhere(Integer page, Integer size, TbSpecification t) {
+        /*
+         * 1. 创建条件对象
+         * 2. 添加 specName like 条件
+         * 3. 调用父类方法分页查询
+         * */
         Example example = new Example(TbSpecification.class);
-
-        // 添加搜索条件
         Example.Criteria criteria = example.createCriteria();
-        if(!StringUtils.isEmpty(query.getSpecName()))
-            criteria.andLike("specName", "%" + query.getSpecName() + "%");
 
-        // 返回搜索结果
-        return specificationMapper.selectByExample(example);
+        if(!StringUtils.isEmpty(t.getSpecName())) {
+            criteria.andLike("specName", "%" + t.getSpecName() + "%");
+        }
+
+        return super.findPageByWhere(page, size, example);
     }
 
     /**
-     * 分页搜索
+     * 主键查询
      *
-     * @param page 页码
-     * @param size 每页数量
-     * @param query 品牌查询实体
-     */
-    @Override
-    public PageResult searchPage(Integer page, Integer size, TbSpecification query) {
-        // 设置分页
-        PageHelper.startPage(page, size);
-
-        // 分页查询
-        List<TbSpecification> list = search(query);
-
-        // 获取分页相关信息
-        PageInfo<TbSpecification> pageInfo = new PageInfo<>(list);
-
-        return new PageResult(pageInfo.getTotal(), pageInfo.getList());
-    }
-
-    /**
-     * 主键查找
-     *
-     * @param id 主键
+     * @param id 规格主键
+     * @return   复合规格对象，包含规格与规格选项
      */
     @Override
     public Specification findOne(Long id) {
-        // 1. 查找规格
+        /*
+         * 1. 通过主键查询规格
+         * 2. 通过主键查询规格选项集合
+         *  2.1 为了提供查询效率创建查询条件
+         *  2.2 添加 specId equalTo 条件
+         *  2.3 使用选项mapper查询
+         * 3. 包装成复合对象返回
+         * */
         TbSpecification spec = super.findOne(id);
 
-        // 2. 查找选项
         Example example = new Example(TbSpecificationOption.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("specId", id);
@@ -90,20 +80,29 @@ public class SpecificationServiceImpl extends BaseServiceImpl<TbSpecification> i
 
     /**
      * 添加
-     *  @param specification 规格包装对象，包含规格和规格选项
+     *
+     * @param t 复合规格对象，包含规格与规格选项
      * */
     @Override
-    public void add(Specification specification) {
-        // 1. 持久化规格对象
-        TbSpecification spec = specification.getSpecification();
-        add(spec);
+    public void add(Specification t) {
+        /*
+         * 1. 持久化规格对象
+         *  1.1 提取规格对象
+         *  1.2 调用父类添加方法
+         * 2. 持久化规格选项对象
+         *  2.1 提取规格选项集合对象
+         *  2.2 遍历选项集合
+         *  2.3 设置选项对象的specId为规格对象Id
+         *  2.4 调用选项mapper添加方法
+         * */
+        TbSpecification spec = t.getSpecification();
+        super.add(spec);
 
-        // 2. 持久化选项对象
-        List<TbSpecificationOption> list = specification.getSpecificationOptionList();
-        if(list != null && list.size() > 0) {
-            for (TbSpecificationOption option : list) {
-                option.setSpecId(spec.getId());                        // 设置选项对应的规格ID
-                specificationOptionMapper.insertSelective(option);     // 持久化存储
+        List<TbSpecificationOption> optionList = t.getSpecificationOptionList();
+        if(optionList != null && optionList.size() > 0) {
+            for (TbSpecificationOption option : optionList) {
+                option.setSpecId(spec.getId());
+                specificationOptionMapper.insertSelective(option);
             }
         }
     }
@@ -111,22 +110,35 @@ public class SpecificationServiceImpl extends BaseServiceImpl<TbSpecification> i
     /**
      * 更新
      *
-     * @param specification 规格包装对象，包含规格和规格选项
+     * @param t 复合规格对象，包含规格与规格选项
      */
     @Override
-    public void update(Specification specification) {
-        // 1. 更新规则对象
-        TbSpecification spec = specification.getSpecification();
-        update(spec);
+    public void update(Specification t) {
+        /*
+         * 1. 持久化规格
+         *  1.1 提取规格
+         *  1.2 调用父类添加方法
+         * 2. 删除旧规格选项
+         *  2.1 为了删除效率创建删除条件
+         *  2.2 添加 specId equalTo 条件
+         *  2.3 调用选项mapper删除方法
+         * 3. 添加新选项
+         *  3.1 提取选项集合
+         *  3.2 遍历选项集合
+         *  3.3 设置选项的specId为规格对象Id
+         *  3.4 调用选项mapper添加方法
+         * */
+        TbSpecification spec = t.getSpecification();
+        super.update(spec);
 
-        // 2. 删除规格选项
+        // 删除旧规格选项
         Example example = new Example(TbSpecificationOption.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("specId", spec.getId());
         specificationOptionMapper.deleteByExample(example);
 
-        // 3. 持久化新的规则选项
-        List<TbSpecificationOption> list = specification.getSpecificationOptionList();
+        // 添加新规格选项
+        List<TbSpecificationOption> list = t.getSpecificationOptionList();
         for (TbSpecificationOption option : list) {
             option.setSpecId(spec.getId());
             specificationOptionMapper.insertSelective(option);
@@ -136,14 +148,20 @@ public class SpecificationServiceImpl extends BaseServiceImpl<TbSpecification> i
     /**
      * 删除
      *
-     * @param ids 规格ID列表
+     * @param ids 规格主键集合
      */
     @Override
-    public void deleteByIds(Serializable[] ids) {
-        // 1. 删除规格
-        super.deleteByIds(ids);  // 参数类型一样，记得加super，否则递归死循环
+    public void deleteMore(Serializable[] ids) {
+        /*
+         * 1. 调用父类方法删除规格
+         * 2. 删除规格选项
+         *  2.1 为了删除效率创建删除条件
+         *  2.2 添加 specId equalTo 条件
+         *  2.3 调用选项mapper删除方法
+         * */
+        super.deleteMore(ids);  // 参数类型一样，记得加super，否则递归死循环
 
-        // 2. 删除选项
+        // 删除规格选项
         Example example = new Example(TbSpecificationOption.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andIn("specId", Arrays.asList(ids));
@@ -152,6 +170,8 @@ public class SpecificationServiceImpl extends BaseServiceImpl<TbSpecification> i
 
     /**
      * 规格下拉列表
+     *
+     * @return 规格id与name构成的集合：[ {id, specName}, {id, specName}, ... ]
      */
     @Override
     public List<Map<String, String>> selectOptionList() {

@@ -30,7 +30,7 @@ public class SpecificationController {
     public PageResult search(@RequestParam(defaultValue = "1") Integer page,
                              @RequestParam(defaultValue = "10") Integer size,
                              @RequestBody(required = false)  TbSpecification specification) {
-        return specificationService.searchPage(page, size, specification);
+        return specificationService.findPageByWhere(page, size, specification);
     }
 
     // 通过主键查询
@@ -77,7 +77,7 @@ public class SpecificationController {
         HttpResult httpResult;
 
         try {
-            specificationService.deleteByIds(ids);
+            specificationService.deleteMore(ids);
             httpResult = HttpResult.ok("删除成功");
         }catch (Exception e) {
             e.printStackTrace();

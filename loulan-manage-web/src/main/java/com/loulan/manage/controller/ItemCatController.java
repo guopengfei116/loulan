@@ -71,7 +71,7 @@ public class ItemCatController {
         HttpResult httpResult;
 
         try {
-            itemCatService.deleteByIds(ids);
+            itemCatService.deleteMore(ids);
             httpResult = HttpResult.ok("删除成功");
         }catch (Exception e) {
             e.printStackTrace();

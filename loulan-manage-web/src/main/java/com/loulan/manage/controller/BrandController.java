@@ -36,7 +36,7 @@ public class BrandController {
     public PageResult findPage(@RequestParam(defaultValue = "1") Integer page,
                                @RequestParam(defaultValue = "10") Integer size,
                                @RequestBody(required = false) TbBrand brand) {
-        return brandService.searchPage(page, size, brand);
+        return brandService.findPageByWhere(page, size, brand);
     }
 
     // 查询一个
@@ -84,7 +84,7 @@ public class BrandController {
         HttpResult httpResult;
 
         try {
-            brandService.deleteByIds(ids);
+            brandService.deleteMore(ids);
             httpResult = HttpResult.ok("删除成功");
         }catch (Exception e) {
             e.printStackTrace();

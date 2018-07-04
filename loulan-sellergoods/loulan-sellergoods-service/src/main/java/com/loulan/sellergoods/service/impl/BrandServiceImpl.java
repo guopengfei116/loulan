@@ -23,49 +23,35 @@ public class BrandServiceImpl extends BaseServiceImpl<TbBrand> implements BrandS
     private BrandMapper brandMapper;
 
     /**
-     * 搜索
+     * 分页sql条件查询
      *
-     * @param query 品牌查询实体
+     * @param  page  页码
+     * @param  size  页大小
+     * @param  t     实体对象，封装了查询条件
+     * @return       分页实体对象
      */
-    @Override
-    public List<TbBrand> search(TbBrand query) {
-        // 创建自定义sql条件
+    public PageResult findPageByWhere(Integer page, Integer size, TbBrand t) {
+        /*
+        * 1. 创建条件对象
+        * 2. 添加 name like 条件
+        * 3. 添加 firstChar equalTo 条件
+        * 4. 调用父类方法分页查询
+        * */
         Example example = new Example(TbBrand.class);
-
-        // 添加搜索条件
         Example.Criteria criteria = example.createCriteria();
-        if(!StringUtils.isEmpty(query.getFirstChar()))
-            criteria.andEqualTo("firstChar", query.getFirstChar());
-        if(!StringUtils.isEmpty(query.getName()))
-            criteria.andLike("name", "%" + query.getName() + "%");
 
-        // 返回搜索结果
-        return brandMapper.selectByExample(example);
-    }
+        if(!StringUtils.isEmpty(t.getFirstChar()))
+            criteria.andEqualTo("firstChar", t.getFirstChar());
+        if(!StringUtils.isEmpty(t.getName()))
+            criteria.andLike("name", "%" + t.getName() + "%");
 
-    /**
-     * 分页搜索
-     *
-     * @param page 页码
-     * @param size 每页数量
-     * @param query 品牌查询实体
-     */
-    @Override
-    public PageResult searchPage(Integer page, Integer size, TbBrand query) {
-        // 设置分页
-        PageHelper.startPage(page, size);
-
-        // 分页查询
-        List<TbBrand> list = search(query);
-
-        // 获取分页相关信息
-        PageInfo<TbBrand> pageInfo = new PageInfo<>(list);
-
-        return new PageResult(pageInfo.getTotal(), pageInfo.getList());
+        return super.findPageByWhere(page, size, example);
     }
 
     /**
      * 品牌下拉列表
+     *
+     * @return 规格id与name(as text)构成的集合：[ {id, text}, {id, text}, ... ]
      */
     @Override
     public List<Map<String, String>> selectOptionList() {

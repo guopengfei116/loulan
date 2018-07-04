@@ -9,74 +9,104 @@ import java.util.List;
 public interface BaseService<T> {
 
     /**
-     * 根据主键查询
+     * 根据主键查
      *
-     * @param id 主键
-     * @return 实体对象
+     * @param  id  主键
+     * @return     实体对象
      * */
     T findOne(Serializable id);
 
     /**
-     * 查询全部
+     * 查询所有
      *
      * @return 实体对象集合
      * */
     List<T> findAll();
 
     /**
-     * 条件查询
+     * 实体条件查询
      *
-     * @param query 查询条件实体对象
-     * @return 实体对象
+     * @param  t  实体对象，封装了查询条件
+     * @return    实体对象集合
      * */
-    List<T> findByWhere(T query);
+    List<T> findByWhere(T t);
+
+    /**
+     * sql条件查询
+     *
+     * @param  example  条件对象
+     * @return          实体对象集合
+     * */
+    List<T> findByWhere(Example example);
 
     /**
      * 分页查询
      *
-     * @param page 页码
-     * @param size 每页大小
-     * @return 分页实体对象
+     * @param  page  页码
+     * @param  size  页大小
+     * @return       分页实体对象
      * */
     PageResult findPage(Integer page, Integer size);
 
     /**
-     * 分页条件查询
+     * 分页实体条件查询
      *
-     * @param page 页码
-     * @param size 每页大小
-     * @param query 查询条件实体对象
-     * @return 分页实体对象
+     * @param  page  页码
+     * @param  size  页大小
+     * @param  t     实体对象，封装了查询条件
+     * @return       分页实体对象
      * */
-    PageResult findPage(Integer page, Integer size, T query);
+    PageResult findPageByWhere(Integer page, Integer size, T t);
 
     /**
-     * 分页搜索
+     * 分页sql条件查询
      *
-     * @param page 页码
-     * @param size 每页数量
-     * @param example 条件对象
-     */
-    PageResult searchPage(Integer page, Integer size, Example example);
+     * @param  page     页码
+     * @param  size     页大小
+     * @param  example  条件对象
+     * @return          分页实体对象
+     * */
+    PageResult findPageByWhere(Integer page, Integer size, Example example);
 
     /**
-     * 添加实体
+     * 添加
      *
      * @param t 实体对象
      * */
     void add(T t);
 
     /**
-     * 更新实体
+     * 批量添加
+     *
+     * @param ts 实体对象集合
+     * */
+    void addMore(List<T> ts);
+
+    /**
+     * 修改
      *
      * @param t 实体对象
      * */
     void update(T t);
 
     /**
-     * 删除实体
+     * 批量修改
      *
-     * @param ids 主键列表
+     * @param ts 实体对象集合
      * */
-     void deleteByIds(Serializable[] ids);
+    void updateMore(List<T> ts);
+
+    /**
+     * 删除
+     *
+     * @param id 主键
+     * */
+     void delete(Serializable id);
+
+    /**
+     * 批量删除
+     *
+     * @param ids 主键集合
+     * */
+    void deleteMore(Serializable[] ids);
 }

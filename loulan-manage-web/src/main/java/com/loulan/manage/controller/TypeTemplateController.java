@@ -19,7 +19,7 @@ public class TypeTemplateController {
     public PageResult search(@RequestParam(defaultValue = "1") Integer page,
                              @RequestParam(defaultValue = "10") Integer size,
                              @RequestBody(required = false) TbTypeTemplate typeTemplate) {
-        return typeTemplateService.searchPage(page, size, typeTemplate);
+        return typeTemplateService.findPageByWhere(page, size, typeTemplate);
     }
 
     // 通过主键查询
@@ -66,7 +66,7 @@ public class TypeTemplateController {
         HttpResult httpResult;
 
         try {
-            typeTemplateService.deleteByIds(ids);
+            typeTemplateService.deleteMore(ids);
             httpResult = HttpResult.ok("删除成功");
         }catch (Exception e) {
             e.printStackTrace();

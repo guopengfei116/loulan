@@ -10,23 +10,30 @@ import tk.mybatis.mapper.entity.Example;
 
 @Service(interfaceClass = TypeTemplateService.class)
 public class TypeTemplateServiceImpl extends BaseServiceImpl<TbTypeTemplate> implements TypeTemplateService {
+
     /**
-     * 分页搜索
+     * 分页sql条件查询
      *
-     * @param page 页码
-     * @param size 每页数量
-     * @param query 查询实体
+     * @param  page  页码
+     * @param  size  页大小
+     * @param  t     实体对象，封装了查询条件
+     * @return       分页实体对象
      */
-    public PageResult searchPage(Integer page, Integer size, TbTypeTemplate query) {
-        // 查询对象
+    @Override
+    public PageResult findPageByWhere(Integer page, Integer size, TbTypeTemplate t) {
+        /*
+         * 1. 创建条件对象
+         * 2. 添加 name like 条件
+         * 3. 调用父类方法分页查询
+         * */
         Example example = new Example(TbTypeTemplate.class);
-
-        // 添加搜索条件
         Example.Criteria criteria = example.createCriteria();
-        if(!StringUtils.isEmpty(query.getName()))
-            criteria.andLike("name", "%" + query.getName() + "%");
 
-        // 返回分页数据
-        return super.searchPage(page, size, example);
+        if(!StringUtils.isEmpty(t.getName())) {
+            criteria.andLike("name", "%" + t.getName() + "%");
+        }
+
+        return super.findPageByWhere(page, size, example);
     }
+
 }

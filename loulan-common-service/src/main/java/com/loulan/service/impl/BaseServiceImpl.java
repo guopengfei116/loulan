@@ -8,18 +8,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.persistence.Id;
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.util.Arrays;
 import java.util.List;
 
 public class BaseServiceImpl<T> implements BaseService<T> {
+
     @Autowired
     private Mapper<T> mapper;
 
     /**
-     * 根据主键查询
+     * 根据主键查
      *
-     * @param id 主键
-     * @return 实体对象
+     * @param  id  主键
+     * @return     实体对象
      */
     @Override
     public T findOne(Serializable id) {
@@ -27,7 +32,7 @@ public class BaseServiceImpl<T> implements BaseService<T> {
     }
 
     /**
-     * 查询全部
+     * 查询所有
      *
      * @return 实体对象集合
      */
@@ -37,25 +42,42 @@ public class BaseServiceImpl<T> implements BaseService<T> {
     }
 
     /**
-     * 条件查询
+     * 实体条件查询
      *
-     * @param query 查询条件实体对象
-     * @return 实体对象
+     * @param t 实体对象，封装了查询条件
+     * @return  实体对象集合
      */
     @Override
-    public List<T> findByWhere(T query) {
-        return mapper.select(query);
+    public List<T> findByWhere(T t) {
+        return mapper.select(t);
+    }
+
+    /**
+     * sql条件查询
+     *
+     * @param example 条件对象
+     * @return        实体对象集合
+     */
+    @Override
+    public List<T> findByWhere(Example example) {
+        return mapper.selectByExample(example);
     }
 
     /**
      * 分页查询
      *
-     * @param page 页码
-     * @param size 每页大小
-     * @return 分页实体对象
+     * @param  page  页码
+     * @param  size  页大小
+     * @return       分页实体对象
      */
     @Override
     public PageResult findPage(Integer page, Integer size) {
+        /*
+        * 1. 设置分页参数
+        * 2. 分页查询
+        * 3. 查询结果包装成分页对象
+        * 4. 转换为自定义分页对象
+        * */
         PageHelper.startPage(page, size);
         List<T> list = mapper.selectAll();
         PageInfo<T> pageInfo = new PageInfo<>(list);
@@ -63,45 +85,63 @@ public class BaseServiceImpl<T> implements BaseService<T> {
     }
 
     /**
-     * 分页条件查询
-     * 通过反射获取实体属性，全部使用like模糊查询
+     * 分页实体条件查询
      *
-     * @param page  页码
-     * @param size  每页大小
-     * @param query 查询条件实体对象
-     * @return 分页实体对象
+     * @param  page  页码
+     * @param  size  页大小
+     * @param  t     实体对象，封装了查询条件
+     * @return       分页实体对象
      */
     @Override
-    public PageResult findPage(Integer page, Integer size, T query) {
+    public PageResult findPageByWhere(Integer page, Integer size, T t) {
+
+        // 没有条件返回全部
+        if(t == null) {
+            return findPage(page, size);
+        }
+
+        /*
+         * 1. 设置分页参数
+         * 2. 分页实体条件查询
+         * 3. 查询结果包装成分页对象
+         * 4. 转换为自定义分页对象
+         * */
         PageHelper.startPage(page, size);
-        List<T> list = mapper.select(query);
+        List<T> list = mapper.select(t);
         PageInfo<T> pageInfo = new PageInfo<>(list);
         return new PageResult(pageInfo.getTotal(), pageInfo.getList());
     }
 
     /**
-     * 分页搜索
+     * 分页sql条件查询
      *
-     * @param page 页码
-     * @param size 每页数量
-     * @param example 条件对象
+     * @param  page     页码
+     * @param  size     页大小
+     * @param  example  条件对象
+     * @return          分页实体对象
      */
     @Override
-    public PageResult searchPage(Integer page, Integer size, Example example) {
-        // 设置分页
-        PageHelper.startPage(page, size);
+    public PageResult findPageByWhere(Integer page, Integer size, Example example) {
 
-        // 分页查询
+        // 没有条件返回全部
+        if(example == null) {
+            return findPage(page, size);
+        }
+
+        /*
+         * 1. 设置分页参数
+         * 2. 分页sql条件查询
+         * 3. 查询结果包装成分页对象
+         * 4. 转换为自定义分页对象
+         * */
+        PageHelper.startPage(page, size);
         List<T> list = mapper.selectByExample(example);
-
-        // 获取分页相关信息
         PageInfo<T> pageInfo = new PageInfo<>(list);
-
         return new PageResult(pageInfo.getTotal(), pageInfo.getList());
     }
 
     /**
-     * 添加实体
+     * 添加
      *
      * @param t 实体对象
      */
@@ -111,7 +151,19 @@ public class BaseServiceImpl<T> implements BaseService<T> {
     }
 
     /**
-     * 更新实体
+     * 批量添加
+     *
+     * @param ts 实体对象集合
+     */
+    @Override
+    public void addMore(List<T> ts) {
+        for (T t : ts) {
+            add(t);
+        }
+    }
+
+    /**
+     * 修改
      *
      * @param t 实体对象
      */
@@ -121,16 +173,58 @@ public class BaseServiceImpl<T> implements BaseService<T> {
     }
 
     /**
-     * 删除实体
+     * 批量修改
      *
-     * @param ids 主键列表
+     * @param ts 实体对象集合
      */
     @Override
-    public void deleteByIds(Serializable[] ids) {
-        if(ids != null && ids.length > 0) {
-            for (Serializable id : ids) {
-                mapper.deleteByPrimaryKey(id);
-            }
+    public void updateMore(List<T> ts) {
+        for (T t : ts) {
+            update(t);
         }
     }
+
+    /**
+     * 删除
+     *
+     * @ param id 主键
+     */
+    @Override
+    public void delete(Serializable id) {
+        mapper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param ids 主键集合
+     */
+    @Override
+    public void deleteMore(Serializable[] ids) {
+        /*
+         * 1. 通过反射注解拿到主键名称
+         *  1.1 先拿到实体类的class
+         *  1.2 再拿到实体类所有的属性对象
+         *  1.3 遍历属性对象
+         *  1.4 拥有Id注解的属性就是主键
+         * 2. 为了删除效率创建删除条件
+         * 3. 添加 主键名称 in 条件
+         * 4. 调用mapper删除方法
+         * */
+        String primaryKey = "id";
+        Class<T> tClass = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        Field[] fields = tClass.getDeclaredFields();
+        for (Field field : fields) {
+            if(field.isAnnotationPresent(Id.class)) {
+                primaryKey = field.getName();
+            }
+        }
+
+        Example example = new Example(tClass);
+        Example.Criteria criteria = example.createCriteria();
+
+        criteria.andIn(primaryKey, Arrays.asList(ids));
+        mapper.deleteByExample(example);
+    }
+
 }

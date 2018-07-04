@@ -19,7 +19,7 @@ public class SellerController {
     public PageResult search(@RequestParam(defaultValue = "1") Integer page,
                              @RequestParam(defaultValue = "10") Integer size,
                              @RequestBody(required = false) TbSeller seller) {
-        return sellerService.searchPage(page, size, seller);
+        return sellerService.findPageByWhere(page, size, seller);
     }
 
     /**

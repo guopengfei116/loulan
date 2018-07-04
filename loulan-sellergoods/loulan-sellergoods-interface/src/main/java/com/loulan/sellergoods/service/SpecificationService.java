@@ -2,48 +2,40 @@ package com.loulan.sellergoods.service;
 
 import com.loulan.pojo.TbSpecification;
 import com.loulan.service.BaseService;
-import com.loulan.vo.PageResult;
 import com.loulan.vo.Specification;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 public interface SpecificationService extends BaseService<TbSpecification> {
 
     /**
-     * 搜索
-     * */
-    List<TbSpecification> search(TbSpecification query);
-
-    /**
-     * 分页搜索
-     * */
-    PageResult searchPage(Integer page, Integer size, TbSpecification query);
-
-    /**
-     * 主键查找
-     * */
+     * 主键查询
+     *
+     * @param id 主键
+     * @return   复合规格对象，包含规格与规格选项
+     */
     Specification findOne(Long id);
 
     /**
      * 添加
+     *
+     * @param t 复合规格对象，包含规格与规格选项
      * */
-    void add(Specification specification);
+    void add(Specification t);
 
     /**
      * 更新
+     *
+     * @param t 复合规格对象，包含规格与规格选项
      * */
-    void update(Specification specification);
-
-    /**
-     * 删除
-     * */
-    void deleteByIds(Serializable[] ids);
+    void update(Specification t);
 
     /**
      * 规格下拉列表
-     * */
+     *
+     * @return 规格id与name构成的集合：[ {id, specName}, {id, specName}, ... ]
+     */
     List<Map<String, String>> selectOptionList();
 
 }

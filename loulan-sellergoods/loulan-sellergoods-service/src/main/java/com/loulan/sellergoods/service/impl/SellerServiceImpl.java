@@ -16,41 +16,44 @@ public class SellerServiceImpl extends BaseServiceImpl<TbSeller> implements Sell
     @Autowired
     private SellerMapper sellerMapper;
 
-     /**
-     * 分页搜索
+    /**
+     * 分页sql条件查询
      *
-     * @param page 页码
-     * @param size 每页数量
-     * @param query 品牌查询实体
+     * @param  page  页码
+     * @param  size  页大小
+     * @param  t     实体对象，封装了查询条件
+     * @return       分页实体对象
      */
     @Override
-    public PageResult searchPage(Integer page, Integer size, TbSeller query) {
-        if(query != null) {
-            Example example = new Example(TbSeller.class);
+    public PageResult findPageByWhere(Integer page, Integer size, TbSeller t) {
+        /*
+         * 1. 创建条件对象
+         * 2. 添加 name like 条件
+         * 3. 添加 nickName like 条件
+         * 4. 添加 status equalTo 条件
+         * 5. 调用父类方法分页查询
+         * */
+        Example example = new Example(TbSeller.class);
+        Example.Criteria criteria = example.createCriteria();
 
-            // 搜索条件，商家名称，店铺名称，状态
-            Example.Criteria criteria = example.createCriteria();
-            if (!StringUtils.isEmpty(query.getName())) {
-                criteria.andLike("name", "%" + query.getName() + "%");
-            }
-            if (!StringUtils.isEmpty(query.getNickName())) {
-                criteria.andLike("nickName", "%" + query.getNickName() + "%");
-            }
-            if (!StringUtils.isEmpty(query.getStatus())) {
-                criteria.andEqualTo("status", query.getStatus());
-            }
-
-            return super.searchPage(page, size, example);
-        }else {
-            return super.findPage(page, size);
+        if (!StringUtils.isEmpty(t.getName())) {
+            criteria.andLike("name", "%" + t.getName() + "%");
         }
+        if (!StringUtils.isEmpty(t.getNickName())) {
+            criteria.andLike("nickName", "%" + t.getNickName() + "%");
+        }
+        if (!StringUtils.isEmpty(t.getStatus())) {
+            criteria.andEqualTo("status", t.getStatus());
+        }
+
+        return super.findPageByWhere(page, size, example);
     }
 
     /**
      * 更新状态
      *
-     * @param id 主键
-     * @param status   状态，0：未审核 1：已审核 2：审核未通过 3：关闭
+     * @param id     主键
+     * @param status 状态，0：未审核 1：已审核 2：审核未通过 3：关闭
      */
     @Override
     public void updateStatus(String id, String status) throws Exception {
@@ -66,24 +69,16 @@ public class SellerServiceImpl extends BaseServiceImpl<TbSeller> implements Sell
     }
 
     /**
-     * 添加商家，新入驻商家初始状态强制为0
+     * 添加商家
+     * 新入驻商家初始为未审核，强制设status为0
+     * 状态，0：未审核 1：已审核 2：审核未通过 3：关闭
      *
-     * @param seller 实体对象
+     * @param t 实体对象
      * */
     @Override
-    public void add(TbSeller seller) {
-        seller.setStatus("0");
-        super.add(seller);
+    public void add(TbSeller t) {
+        t.setStatus("0");
+        super.add(t);
     }
 
-    /**
-     * 更新商家信息，更新时不能让商家任意修改状态
-     *
-     * @param seller 实体对象
-     * */
-    @Override
-    public void update(TbSeller seller) {
-        seller.setStatus(null);
-        super.update(seller);
-    }
 }

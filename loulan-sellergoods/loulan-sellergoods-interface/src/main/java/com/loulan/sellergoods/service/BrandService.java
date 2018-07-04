@@ -10,17 +10,10 @@ import java.util.Map;
 public interface BrandService extends BaseService<TbBrand> {
 
     /**
-    * 搜索
-    * */
-    List<TbBrand> search(TbBrand query);
-
-    /**
-     * 分页搜索
-     * */
-    PageResult searchPage(Integer page, Integer size, TbBrand query);
-
-    /**
      * 品牌下拉列表
+     *
+     * @return 规格id与name(as text)构成的集合：[ {id, text}, {id, text}, ... ]
      * */
     List<Map<String, String>> selectOptionList();
+
 }
