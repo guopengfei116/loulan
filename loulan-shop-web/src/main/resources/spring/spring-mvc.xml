@@ -25,9 +25,9 @@
 
     <!--远程服务调用-->
     <!--配置调用者名称-->
-    <dubbo:application name="loulan-manage-web"/>
+    <dubbo:application name="loulan-shop-web"/>
     <!--服务注册地址-->
     <dubbo:registry address="zookeeper://192.168.12.168:2181"/>
     <!--注解驱动，注入依赖服务-->
-    <dubbo:annotation package="com.loulan.manage.controller"/>
+    <dubbo:annotation package="com.loulan.shop.controller"/>
 </beans>
