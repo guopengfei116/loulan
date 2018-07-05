@@ -29,10 +29,11 @@ public interface GoodsService extends BaseService<TbGoods> {
     void update(Goods t);
 
     /**
-     * 批量更新状态
+     * 批量更新SPU
      *
+     * @param  t    SPU实体对象，封装了审核状态，1：已删除 2：未审核 3：通过审核
      * @param  ids  主键集合
      */
-    void updateMoreStatus(Long[] ids, String status);
+    void updateMore(TbGoods t, Long[] ids) throws RuntimeException;
 
 }

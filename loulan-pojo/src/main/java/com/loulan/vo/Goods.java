@@ -11,6 +11,15 @@ public class Goods {
     private TbGoodsDesc goodsDesc;
     private List<TbItem> itemList;
 
+    public Goods() {
+    }
+
+    public Goods(TbGoods goods, TbGoodsDesc goodsDesc, List<TbItem> itemList) {
+        this.goods = goods;
+        this.goodsDesc = goodsDesc;
+        this.itemList = itemList;
+    }
+
     public TbGoods getGoods() {
         return goods;
     }

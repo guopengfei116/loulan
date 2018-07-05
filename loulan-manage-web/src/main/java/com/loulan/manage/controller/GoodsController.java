@@ -90,11 +90,11 @@ public class GoodsController {
      * @return      执行结果对象
      */
     @PostMapping("/updateMoreStatus")
-    public HttpResult updateMoreStatus(Long[] ids, String status) {
+    public HttpResult updateMoreStatus(@RequestBody TbGoods t, @RequestParam Long[] ids) {
         HttpResult httpResult;
 
         try {
-            goodsService.updateMoreStatus(ids, status);
+            goodsService.updateMore(t, ids);
             httpResult = HttpResult.ok("修改成功");
         }catch (Exception e) {
             e.printStackTrace();
@@ -111,7 +111,7 @@ public class GoodsController {
      * @return      执行结果对象
      * */
     @DeleteMapping("deleteMore")
-    public HttpResult deleteMore(@RequestParam("ids") Long[] ids) {
+    public HttpResult deleteMore(@RequestAttribute Long[] ids) {
         HttpResult httpResult;
 
         try {
