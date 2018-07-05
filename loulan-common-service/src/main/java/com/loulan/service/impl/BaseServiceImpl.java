@@ -17,6 +17,19 @@ import java.util.List;
 
 public class BaseServiceImpl<T> implements BaseService<T> {
 
+    private String primaryKeyName = "id";  // 实体对象主键名称
+    private Class<T> tClass;               // 描述实体类的Class类型对象
+
+    public BaseServiceImpl() {
+        tClass = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        Field[] fields = tClass.getDeclaredFields();
+        for (Field field : fields) {
+            if(field.isAnnotationPresent(Id.class)) {
+                primaryKeyName = field.getName();
+            }
+        }
+    }
+
     @Autowired
     private Mapper<T> mapper;
 
@@ -185,6 +198,21 @@ public class BaseServiceImpl<T> implements BaseService<T> {
     }
 
     /**
+     * 批量修改
+     *
+     * @param t   实体对象
+     * @param ids 主键集合
+     */
+    @Override
+    public void updateMore(T t, Serializable[] ids) {
+        Example example = new Example(tClass);
+        Example.Criteria criteria = example.createCriteria();
+
+        criteria.andIn(primaryKeyName, Arrays.asList(ids));
+        mapper.updateByExampleSelective(t, example);
+    }
+
+    /**
      * 删除
      *
      * @ param id 主键
@@ -211,19 +239,10 @@ public class BaseServiceImpl<T> implements BaseService<T> {
          * 3. 添加 主键名称 in 条件
          * 4. 调用mapper删除方法
          * */
-        String primaryKey = "id";
-        Class<T> tClass = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-        Field[] fields = tClass.getDeclaredFields();
-        for (Field field : fields) {
-            if(field.isAnnotationPresent(Id.class)) {
-                primaryKey = field.getName();
-            }
-        }
-
         Example example = new Example(tClass);
         Example.Criteria criteria = example.createCriteria();
 
-        criteria.andIn(primaryKey, Arrays.asList(ids));
+        criteria.andIn(primaryKeyName, Arrays.asList(ids));
         mapper.deleteByExample(example);
     }
 

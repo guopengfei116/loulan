@@ -97,6 +97,14 @@ public interface BaseService<T> {
     void updateMore(List<T> ts);
 
     /**
+     * 批量修改
+     *
+     * @param t   实体对象
+     * @param ids 主键集合
+     */
+    void updateMore(T t, Serializable[] ids);
+
+    /**
      * 删除
      *
      * @param id 主键
