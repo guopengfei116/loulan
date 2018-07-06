@@ -40,11 +40,11 @@ public class SellerController {
     }
 
     /**
-     * 添加，商家默认为未审核状态，0：未审核 1：已审核 2：审核未通过 3：关闭
+     * 商家注册，新商家默认为未审核状态，0：未审核 1：已审核 2：审核未通过 3：关闭
      *
      * @param t 实体对象
      */
-    @PostMapping("/add")
+    @PutMapping("/add")
     public HttpResult add(@RequestBody TbSeller t) {
         HttpResult httpResult;
 
@@ -61,7 +61,7 @@ public class SellerController {
     }
 
     /**
-     * 修改
+     * 完善信息，商家没有权限修改状态，需要去掉，商家入驻时间也不能修改
      *
      * @param t 实体对象
      */
@@ -71,6 +71,8 @@ public class SellerController {
 
         // 通过更新方法修改状态
         try {
+            t.setStatus(null);
+            t.setCreateTime(null);
             sellerService.update(t);
             httpResult = HttpResult.ok("修改成功");
         }catch (Exception e) {

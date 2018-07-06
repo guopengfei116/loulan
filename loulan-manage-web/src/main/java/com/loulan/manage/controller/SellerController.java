@@ -32,16 +32,15 @@ public class SellerController {
     /**
      * 更新状态
      *
-     * @param id 主键
-     * @param status   状态，0：未审核 1：已审核 2：审核未通过 3：关闭
+     * @param t 实体对象，封装了被改id与新status字段
      */
-    @GetMapping("/updateStatus")
-    public HttpResult updateStatus(String id, String status) {
+    @PostMapping("/updateStatus")
+    public HttpResult updateStatus(@RequestBody TbSeller t) {
         HttpResult httpResult;
 
         // 通过更新方法修改状态
         try {
-            sellerService.updateStatus(id, status);
+            sellerService.update(t);
             httpResult = HttpResult.ok("修改成功");
         }catch (Exception e) {
             e.printStackTrace();

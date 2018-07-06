@@ -50,8 +50,7 @@ public class SellerServiceImpl extends BaseServiceImpl<TbSeller> implements Sell
     }
 
     /**
-     * 添加商家
-     * 新入驻商家初始为未审核，强制设status为0
+     * 添加商家，新入驻商家初始为未审核，强制设status为0
      * 状态，0：未审核 1：已审核 2：审核未通过 3：关闭
      *
      * @param t 实体对象
@@ -63,22 +62,20 @@ public class SellerServiceImpl extends BaseServiceImpl<TbSeller> implements Sell
     }
 
     /**
-     * 更新状态
+     * 修改信息
      *
-     * @param id     主键
-     * @param status 状态，0：未审核 1：已审核 2：审核未通过 3：关闭
+     * @param t 实体对象
      */
     @Override
-    public void updateStatus(String id, String status) throws Exception {
+    public void update(TbSeller t) throws RuntimeException {
+
+        // 状态，0：未审核 1：已审核 2：审核未通过 3：关闭
+        String status = t.getStatus();
         if(!"0".equals(status) && !"1".equals(status) && !"2".equals(status) && !"3".equals(status)) {
-            throw new Exception("status数值不符合要求");
+            throw new RuntimeException("status错误");
         }
 
-        TbSeller seller = new TbSeller();
-        seller.setSellerId(id);
-        seller.setStatus(status);
-
-        sellerMapper.updateByPrimaryKeySelective(seller);
+        super.update(t);
     }
 
 }
