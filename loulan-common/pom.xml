@@ -11,4 +11,11 @@
 
     <artifactId>loulan-common</artifactId>
 
+    <dependencies>
+        <!-- fastDFS客户端 -->
+        <dependency>
+            <groupId>fastdfs_client</groupId>
+            <artifactId>fastdfs_client</artifactId>
+        </dependency>
+    </dependencies>
 </project>

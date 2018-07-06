@@ -11,12 +11,19 @@
     <!--映射器与适配器注解驱动-->
     <mvc:annotation-driven>
         <!--配置 application/json 数据转换引擎-->
-        <mvc:message-converters register-defaults="true">
+        <mvc:message-converters>
             <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
                 <property name="supportedMediaTypes" value="application/json"/>
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
+
+    <!--文件上传解析器-->
+    <bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8"/>
+        <!--最大5MB，单位bit：1024*1024*5-->
+        <property name="maxUploadSize" value="5242880"/>
+    </bean>
 
     <!--跨域资源访问-->
     <mvc:cors>
