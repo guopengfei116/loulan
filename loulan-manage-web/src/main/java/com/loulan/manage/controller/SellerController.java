@@ -15,6 +15,17 @@ public class SellerController {
     private SellerService sellerService;
 
     /**
+     * 主键查询
+     *
+     * @param  id  主键
+     * @return     实体对象
+     * */
+    @GetMapping("/findOne")
+    public TbSeller findOne(String id) {
+        return sellerService.findOne(id);
+    }
+
+    /**
      * 分页sql条件查询
      *
      * @param  page   页码
@@ -49,4 +60,5 @@ public class SellerController {
 
         return httpResult;
     }
+
 }

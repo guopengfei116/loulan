@@ -27,6 +27,7 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
         </dependency>
+
         <!-- dubbo相关 -->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -40,6 +41,7 @@
             <groupId>com.github.sgroschupf</groupId>
             <artifactId>zkclient</artifactId>
         </dependency>
+
         <!-- json的解析 -->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -50,6 +52,7 @@
             <artifactId>servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
+
         <!-- 权限认证 -->
         <dependency>
             <groupId>org.springframework.security</groupId>
