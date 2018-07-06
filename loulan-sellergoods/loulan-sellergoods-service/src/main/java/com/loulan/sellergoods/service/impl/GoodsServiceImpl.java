@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -134,16 +135,9 @@ public class GoodsServiceImpl extends BaseServiceImpl<TbGoods> implements GoodsS
     @Override
     public void add(Goods t) {
         /*
-         * 1. 添加SPU
-         *  1.1 提取spu
-         *  1.2 调用父类添加方法
-         * 2. 添加详情
-         *  2.1 提取详情
-         *  2.2 设置详情主键为spu主键
-         *  2.2 调用 desc-mapper 添加方法
-         * 3. 添加SKU
-         *  4.1 提取sku集合
-         *  4.2 遍历调用sku-mapper 的添加方法
+         * 1. 调用父类方法添加spu
+         * 2. 提取desc, 调用 desc-mapper 添加方法
+         * 3. 添加sku，调用 item-service 批量添加方法
          * */
         // spu
         super.add(t.getGoods());
@@ -188,9 +182,31 @@ public class GoodsServiceImpl extends BaseServiceImpl<TbGoods> implements GoodsS
     }
 
     /**
+     * 更新，复合对象，增加商家权限验证
+     *
+     * @param  t         复合实体对象，包含商品SPU，商品详细，商品SKU集合
+     * @param  sellerId  商家主键
+     * */
+    public void update(Goods t, String sellerId) {
+
+        // 商家操作，状态只能修改为1或2
+        if(!"1".equals(t.getGoods().getAuditStatus()) && !"2".equals(t.getGoods().getAuditStatus())) {
+            throw new RuntimeException("商家只能删除商品或提交审核");
+        }
+
+        // 检测数据库中商品所属商家是否与当前商家一致，一直才允许修改
+        Goods goods = findOne(t.getGoods().getId());
+        if(!goods.getGoods().getSellerId().equals(sellerId)) {
+            throw new RuntimeException("没有权限访问该商品信息");
+        }
+
+        update(t);
+    }
+
+    /**
      * 批量更新，只更新spu
      *
-     * @param  t    SPU实体对象，封装了审核状态，1：已删除 2：未审核 3：通过审核
+     * @param  t    SPU实体对象，封装了审核状态，1：已删除 2：未审核 3：通过审核 4. 已驳回
      * @param  ids  主键集合
      */
     @Override
@@ -198,7 +214,7 @@ public class GoodsServiceImpl extends BaseServiceImpl<TbGoods> implements GoodsS
 
         // 状态值错误检测
         String status = t.getAuditStatus();
-        if(!"1".equals(status) && !"2".equals(status) && !"3".equals(status)) {
+        if(!"1".equals(status) && !"2".equals(status) && !"3".equals(status) && !"4".equals(status)) {
             throw new RuntimeException("状态错误");
         }
 
@@ -206,14 +222,51 @@ public class GoodsServiceImpl extends BaseServiceImpl<TbGoods> implements GoodsS
     }
 
     /**
+     * 批量更新，只更新spu，只修改属于商家自己的商品
+     *
+     * @param  t         SPU实体对象，封装了审核状态，1：已删除 2：未审核 3：通过审核 4. 已驳回
+     * @param  ids       主键集合
+     * @param  sellerId  商家主键
+     * */
+    public void updateMore(TbGoods t, Long[] ids, String sellerId) throws RuntimeException {
+
+        // 商家操作，状态只能修改为1或2
+        if(!"1".equals(t.getAuditStatus()) && !"2".equals(t.getAuditStatus())) {
+            throw new RuntimeException("商家只能删除商品或提交审核");
+        }
+
+        Example example = new Example(TbGoods.class);
+        Example.Criteria criteria = example.createCriteria();
+
+        criteria.andEqualTo("sellerId", sellerId);
+        criteria.andIn("id", Arrays.asList(ids));
+
+        goodsMapper.updateByExampleSelective(t, example);
+    }
+
+    /**
      * 批量删除，只删除spu，实际上是修改状态假删除
      *
      * @param  ids  主键集合
      */
+    @Override
     public void deleteMore(Long[] ids) {
         TbGoods goods = new TbGoods();
         goods.setAuditStatus("1");
         updateMore(goods, ids);
+    }
+
+    /**
+     * 批量删除，只删除spu，实际上是修改状态假删除，但是只能删除属于商家自己的商品
+     *
+     * @param  ids       主键集合
+     * @param  sellerId  商家主键
+     * */
+    @Override
+    public void deleteMore(Long[] ids, String sellerId) {
+        TbGoods goods = new TbGoods();
+        goods.setAuditStatus("1");
+        updateMore(goods, ids, sellerId);
     }
 
 }
