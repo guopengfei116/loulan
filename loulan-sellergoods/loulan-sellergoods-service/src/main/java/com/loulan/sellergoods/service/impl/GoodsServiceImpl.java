@@ -4,9 +4,11 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.loulan.mapper.GoodsDescMapper;
 import com.loulan.mapper.GoodsMapper;
 import com.loulan.mapper.ItemMapper;
+import com.loulan.mapper.SellerMapper;
 import com.loulan.pojo.TbGoods;
 import com.loulan.pojo.TbGoodsDesc;
 import com.loulan.pojo.TbItem;
+import com.loulan.pojo.TbSeller;
 import com.loulan.sellergoods.service.GoodsDescService;
 import com.loulan.sellergoods.service.GoodsService;
 import com.loulan.sellergoods.service.ItemService;
@@ -15,6 +17,7 @@ import com.loulan.vo.Goods;
 import com.loulan.vo.PageResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -66,6 +69,25 @@ public class GoodsServiceImpl extends BaseServiceImpl<TbGoods> implements GoodsS
         List<TbItem> items = itemService.findByWhere(item);
 
         return new Goods(goods, desc, items);
+    }
+
+    /**
+     * 主键查询，增加商家权限验证
+     *
+     * @param  id        主键
+     * @param  sellerId  商家主键
+     * @return           复合实体对象，包含商品SPU，商品详细，商品SKU集合
+     * */
+    @Override
+    public Goods findOne(Long id, String sellerId) {
+        Goods goods = findOne(id);
+
+        // 商品所属商家与当前商家必须一致
+        if(!goods.getGoods().getSellerId().equals(sellerId)) {
+            throw new RuntimeException("没有权限访问该商品信息");
+        }
+
+        return goods;
     }
 
     /**

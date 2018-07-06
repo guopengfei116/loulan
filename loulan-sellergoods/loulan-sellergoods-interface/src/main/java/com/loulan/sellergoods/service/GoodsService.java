@@ -15,6 +15,15 @@ public interface GoodsService extends BaseService<TbGoods> {
     Goods findOne(Long id);
 
     /**
+     * 主键查询，增加商家权限验证
+     *
+     * @param  id        主键
+     * @param  sellerId  商家主键
+     * @return           复合实体对象，包含商品SPU，商品详细，商品SKU集合
+     * */
+    Goods findOne(Long id, String sellerId);
+
+    /**
      * 添加
      *
      * @param  t  复合实体对象，包含商品SPU，商品详细，商品SKU集合
