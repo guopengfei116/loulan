@@ -34,10 +34,10 @@ public class GoodsController {
      * @param  t     实体对象，封装了查询条件
      * @return       分页实体对象
      */
-    @PostMapping("/findByParentId")
-    public PageResult findByParentId(@RequestParam(defaultValue = "1") Integer page,
-                                     @RequestParam(defaultValue = "10") Integer size,
-                                     @RequestBody(required = false) TbGoods t) {
+    @PostMapping("/findPageByWhere")
+    public PageResult findPageByWhere(@RequestParam(defaultValue = "1") Integer page,
+                                      @RequestParam(defaultValue = "10") Integer size,
+                                      @RequestBody(required = false) TbGoods t) {
         return goodsService.findPageByWhere(page, size, t);
     }
 
