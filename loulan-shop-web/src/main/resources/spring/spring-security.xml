@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://www.springframework.org/schema/security"
+             xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd
+       http://code.alibabatech.com/schema/dubbo
+       http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!--引用dubbo服务-->
+    <dubbo:application name="loulan-shop-web"/>
+    <dubbo:registry address="zookeeper://192.168.12.168:2181"/>
+    <dubbo:reference interface="com.loulan.sellergoods.service.SellerService" id="sellerService"/>
+
+    <!--拦截白名单，静态资源，商家注册-->
+    <http pattern="/css/**" security="none"/>
+    <http pattern="/js/**" security="none"/>
+    <http pattern="/img/**" security="none"/>
+    <http pattern="/seller/register.do" security="none"/>
+
+    <!--登陆成功失败处理-->
+    <beans:bean id="authenticationSuccessHandler" class="com.loulan.shop.security.AuthenticationSuccessHandler"/>
+    <beans:bean id="authenticationFailureHandler" class="com.loulan.shop.security.AuthenticationFailureHandler"/>
+    <!--未授权处理-->
+    <beans:bean id="accessDeniedHandler" class="com.loulan.shop.security.CustomAccessDeniedHandler"/>
+    <!--未登陆或登陆过期的处理-->
+    <beans:bean id="authenticationEntryPoint" class="com.loulan.shop.security.CustomAuthenticationEntryPoint"/>
+
+    <!--权限设定-->
+    <http use-expressions="false" entry-point-ref="authenticationEntryPoint">
+        <!--登陆或自动登陆都可以-->
+        <intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY, IS_AUTHENTICATED_REMEMBERED"/>
+
+        <!--禁止跨站请求伪造-->
+        <csrf disabled="true"/>
+
+        <!--使用内置的表单登陆服务-->
+        <form-login
+            always-use-default-target="false"
+            authentication-success-handler-ref="authenticationSuccessHandler"
+            authentication-failure-handler-ref="authenticationFailureHandler"
+        />
+
+        <!--访问资源无授权后的处理器-->
+        <access-denied-handler ref="accessDeniedHandler"/>
+
+        <!--退出功能-->
+        <logout/>
+    </http>
+
+    <!--自定义认证规则-->
+    <beans:bean id="userDetailsServiceImpl" class="com.loulan.shop.service.impl.UserDetailsServiceImpl">
+        <beans:property name="sellerService" ref="sellerService"/>
+    </beans:bean>
+
+    <!--加密对象-->
+    <beans:bean id="bCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+    <!--认证管理-->
+    <authentication-manager>
+        <authentication-provider user-service-ref="userDetailsServiceImpl">
+            <password-encoder ref="bCryptPasswordEncoder"/>
+        </authentication-provider>
+    </authentication-manager>
+
+</beans:beans>

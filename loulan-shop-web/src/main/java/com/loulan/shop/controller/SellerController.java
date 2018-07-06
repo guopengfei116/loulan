@@ -4,39 +4,26 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.loulan.pojo.TbSeller;
 import com.loulan.sellergoods.service.SellerService;
 import com.loulan.vo.HttpResult;
-import com.loulan.vo.PageResult;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/seller")
 public class SellerController {
 
     @Reference
     private SellerService sellerService;
 
     /**
-     * 主键查询
+     * 查询，商家只能查询自己的信息
      *
-     * @param  id  主键
-     * @return     实体对象
+     * @return  实体对象
      * */
-    @GetMapping("/findOne")
-    public TbSeller findOne(String id) {
-        return sellerService.findOne(id);
-    }
-
-    /**
-     * 分页sql条件查询
-     *
-     * @param  page   页码
-     * @param  size   页大小
-     * @param  t      实体对象，封装了查询条件
-     * @return        分页实体对象
-     * */
-    @PostMapping("/findPageByWhere")
-    public PageResult findPageByWhere(@RequestParam(defaultValue = "1") Integer page,
-                                      @RequestParam(defaultValue = "10") Integer size,
-                                      @RequestBody(required = false) TbSeller t) {
-        return sellerService.findPageByWhere(page, size, t);
+    @GetMapping
+    public TbSeller getInfo() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return sellerService.findOne(username);
     }
 
     /**
@@ -44,12 +31,18 @@ public class SellerController {
      *
      * @param t 实体对象
      */
-    @PutMapping("/add")
-    public HttpResult add(@RequestBody TbSeller t) {
+    @PutMapping
+    public HttpResult register(@RequestBody TbSeller t) {
         HttpResult httpResult;
 
         try {
+            // 未审核
             t.setStatus("0");
+
+            // 密码加密
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            t.setPassword(passwordEncoder.encode(t.getPassword()));
+
             sellerService.add(t);
             httpResult = HttpResult.ok("添加成功");
         }catch (Exception e) {
@@ -65,7 +58,7 @@ public class SellerController {
      *
      * @param t 实体对象
      */
-    @PostMapping("/update")
+    @PostMapping
     public HttpResult update(@RequestBody TbSeller t) {
         HttpResult httpResult;
 

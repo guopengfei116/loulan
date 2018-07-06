@@ -19,6 +19,25 @@
 		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
 
+	<!--访问权限控制-->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!--security放置到父容器-->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring/spring-security.xml</param-value>
+	</context-param>
+
 	<!--设置queryBody编码-->
 	<filter>
 		<filter-name>spring-encoding</filter-name>
@@ -36,4 +55,5 @@
 		<filter-name>spring-encoding</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+
 </web-app>

@@ -10,6 +10,14 @@
        http://code.alibabatech.com/schema/dubbo
        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
+    <!--远程服务调用-->
+    <!--配置调用者名称-->
+    <dubbo:application name="loulan-shop-web"/>
+    <!--服务注册地址-->
+    <dubbo:registry address="zookeeper://192.168.12.168:2181"/>
+    <!--注解驱动，注入依赖服务-->
+    <dubbo:annotation package="com.loulan.shop.controller"/>
+
     <!--映射器与适配器注解驱动-->
     <mvc:annotation-driven>
         <!--配置 application/json 数据转换引擎-->
@@ -31,12 +39,4 @@
     <mvc:cors>
         <mvc:mapping path="/**"/>
     </mvc:cors>
-
-    <!--远程服务调用-->
-    <!--配置调用者名称-->
-    <dubbo:application name="loulan-shop-web"/>
-    <!--服务注册地址-->
-    <dubbo:registry address="zookeeper://192.168.12.168:2181"/>
-    <!--注解驱动，注入依赖服务-->
-    <dubbo:annotation package="com.loulan.shop.controller"/>
 </beans>
