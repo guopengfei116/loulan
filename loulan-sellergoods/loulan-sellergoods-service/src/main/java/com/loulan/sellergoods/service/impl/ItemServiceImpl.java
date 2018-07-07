@@ -13,11 +13,13 @@ import com.loulan.sellergoods.service.ItemService;
 import com.loulan.service.impl.BaseServiceImpl;
 import com.loulan.vo.Goods;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+@Transactional
 @Service(interfaceClass = ItemService.class)
 public class ItemServiceImpl extends BaseServiceImpl<TbItem> implements ItemService {
 
@@ -50,7 +52,7 @@ public class ItemServiceImpl extends BaseServiceImpl<TbItem> implements ItemServ
         Map map = JSON.parseObject(item.getSpec(), Map.class);
         if(map != null) {
             for (Object o : map.values()) {
-                title += o.toString();
+                title = title.concat(o.toString());
             }
         }
 

@@ -4,11 +4,9 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.loulan.mapper.GoodsDescMapper;
 import com.loulan.mapper.GoodsMapper;
 import com.loulan.mapper.ItemMapper;
-import com.loulan.mapper.SellerMapper;
 import com.loulan.pojo.TbGoods;
 import com.loulan.pojo.TbGoodsDesc;
 import com.loulan.pojo.TbItem;
-import com.loulan.pojo.TbSeller;
 import com.loulan.sellergoods.service.GoodsDescService;
 import com.loulan.sellergoods.service.GoodsService;
 import com.loulan.sellergoods.service.ItemService;
@@ -17,7 +15,7 @@ import com.loulan.vo.Goods;
 import com.loulan.vo.PageResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Arrays;
@@ -26,6 +24,7 @@ import java.util.List;
 /**
  * 商品管理，需要注意依赖 goodsDescService 与 ItemService 业务层，防止递归依赖。
  * */
+@Transactional
 @Service(interfaceClass = GoodsService.class)
 public class GoodsServiceImpl extends BaseServiceImpl<TbGoods> implements GoodsService {
 
