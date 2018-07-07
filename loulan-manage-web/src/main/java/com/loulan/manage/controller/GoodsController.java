@@ -84,17 +84,18 @@ public class GoodsController {
     }
 
     /**
-     * 批量修改状态
+     * 批量修改状态，审核状态，1：未审核 2：通过审核 3. 已驳回
      *
-     * @param  ids  主键集合
-     * @return      执行结果对象
+     * @param  status  审核状态
+     * @param  ids     主键集合
+     * @return         执行结果对象
      */
     @PostMapping("/updateMoreStatus")
-    public HttpResult updateMoreStatus(@RequestBody TbGoods t, @RequestParam Long[] ids) {
+    public HttpResult updateMoreStatus(@RequestParam String status, @RequestParam Long[] ids) {
         HttpResult httpResult;
 
         try {
-            goodsService.updateMore(t, ids);
+            goodsService.updateStatusMore(status, ids);
             httpResult = HttpResult.ok("修改成功");
         }catch (Exception e) {
             e.printStackTrace();
