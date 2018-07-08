@@ -1,7 +1,7 @@
-package com.loulan.content;
+package com.loulan.content.service;
 
 import com.loulan.pojo.TbContent;
-import com.loulan.service.BaseService;
+import com.loulan.common.service.BaseService;
 
 import java.util.List;
 

@@ -1,6 +1,8 @@
-package com.loulan.service.impl;
+package com.loulan.content.service.impl;
 
-import com.loulan.content.ContentService;
+import com.alibaba.dubbo.config.annotation.Service;
+import com.loulan.common.service.impl.BaseServiceImpl;
+import com.loulan.content.service.ContentService;
 import com.loulan.mapper.ContentMapper;
 import com.loulan.pojo.TbContent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
+@Service(interfaceClass = ContentService.class)
 public class ContentServiceImpl extends BaseServiceImpl<TbContent> implements ContentService {
 
     @Autowired
