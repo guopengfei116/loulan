@@ -1,12 +1,10 @@
 package com.loulan.sellergoods.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.loulan.mapper.BrandMapper;
 import com.loulan.pojo.TbBrand;
 import com.loulan.sellergoods.service.BrandService;
-import com.loulan.service.impl.BaseServiceImpl;
+import com.loulan.common.service.impl.BaseServiceImpl;
 import com.loulan.vo.PageResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -8,11 +8,11 @@
        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
     <!--duboo服务端口，如果开启多个duboo，需要配置不同的端口防止占用-->
-    <duboo:protocol name="dubbo" port="20880"></duboo:protocol>
+    <duboo:protocol name="dubbo" port="20880"/>
     <!--应用名称，duboo负责做日志记录 -->
-    <duboo:application name="loulan-sellergoods-service"></duboo:application>
+    <duboo:application name="loulan-sellergoods-service"/>
     <!--duboo注册中心地址-->
-    <duboo:registry address="zookeeper://192.168.12.168:2181"></duboo:registry>
+    <duboo:registry address="zookeeper://192.168.12.168:2181"/>
     <!--duboo注解包扫描-->
-    <duboo:annotation package="com.loulan.sellergoods.service.impl"></duboo:annotation>
+    <duboo:annotation package="com.loulan.sellergoods.service.impl"/>
 </beans>

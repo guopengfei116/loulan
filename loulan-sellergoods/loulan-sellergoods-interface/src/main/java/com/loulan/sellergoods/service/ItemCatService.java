@@ -1,7 +1,7 @@
 package com.loulan.sellergoods.service;
 
 import com.loulan.pojo.TbItemCat;
-import com.loulan.service.BaseService;
+import com.loulan.common.service.BaseService;
 
 import java.util.List;
 import java.util.Map;

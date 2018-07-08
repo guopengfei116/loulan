@@ -1,4 +1,4 @@
-package com.loulan.service;
+package com.loulan.common.service;
 
 import com.loulan.vo.PageResult;
 import tk.mybatis.mapper.entity.Example;

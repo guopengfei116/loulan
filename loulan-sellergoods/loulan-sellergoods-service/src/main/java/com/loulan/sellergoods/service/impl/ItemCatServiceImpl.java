@@ -2,10 +2,9 @@ package com.loulan.sellergoods.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.loulan.mapper.ItemCatMapper;
-import com.loulan.pojo.TbGoods;
 import com.loulan.pojo.TbItemCat;
 import com.loulan.sellergoods.service.ItemCatService;
-import com.loulan.service.impl.BaseServiceImpl;
+import com.loulan.common.service.impl.BaseServiceImpl;
 import com.loulan.vo.PageResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

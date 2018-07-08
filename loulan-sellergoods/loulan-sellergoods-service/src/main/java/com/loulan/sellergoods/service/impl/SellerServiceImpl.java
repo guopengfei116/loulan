@@ -4,7 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.loulan.mapper.SellerMapper;
 import com.loulan.pojo.TbSeller;
 import com.loulan.sellergoods.service.SellerService;
-import com.loulan.service.impl.BaseServiceImpl;
+import com.loulan.common.service.impl.BaseServiceImpl;
 import com.loulan.vo.PageResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

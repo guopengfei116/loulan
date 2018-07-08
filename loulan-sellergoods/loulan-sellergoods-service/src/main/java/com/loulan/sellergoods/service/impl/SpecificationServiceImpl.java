@@ -6,7 +6,7 @@ import com.loulan.mapper.SpecificationOptionMapper;
 import com.loulan.pojo.TbSpecification;
 import com.loulan.pojo.TbSpecificationOption;
 import com.loulan.sellergoods.service.SpecificationService;
-import com.loulan.service.impl.BaseServiceImpl;
+import com.loulan.common.service.impl.BaseServiceImpl;
 import com.loulan.vo.PageResult;
 import com.loulan.vo.Specification;
 import org.apache.commons.lang3.StringUtils;

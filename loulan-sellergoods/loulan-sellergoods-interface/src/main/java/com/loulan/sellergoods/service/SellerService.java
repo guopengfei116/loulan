@@ -1,8 +1,7 @@
 package com.loulan.sellergoods.service;
 
 import com.loulan.pojo.TbSeller;
-import com.loulan.service.BaseService;
-import com.loulan.vo.PageResult;
+import com.loulan.common.service.BaseService;
 
 public interface SellerService extends BaseService<TbSeller> {
 

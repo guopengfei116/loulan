@@ -10,7 +10,7 @@ import com.loulan.pojo.TbItem;
 import com.loulan.sellergoods.service.GoodsDescService;
 import com.loulan.sellergoods.service.GoodsService;
 import com.loulan.sellergoods.service.ItemService;
-import com.loulan.service.impl.BaseServiceImpl;
+import com.loulan.common.service.impl.BaseServiceImpl;
 import com.loulan.vo.Goods;
 import com.loulan.vo.PageResult;
 import org.apache.commons.lang3.StringUtils;

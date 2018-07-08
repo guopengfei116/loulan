@@ -10,7 +10,7 @@ import com.loulan.pojo.TbGoods;
 import com.loulan.pojo.TbGoodsDesc;
 import com.loulan.pojo.TbItem;
 import com.loulan.sellergoods.service.ItemService;
-import com.loulan.service.impl.BaseServiceImpl;
+import com.loulan.common.service.impl.BaseServiceImpl;
 import com.loulan.vo.Goods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;

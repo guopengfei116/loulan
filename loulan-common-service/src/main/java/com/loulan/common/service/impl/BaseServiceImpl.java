@@ -1,8 +1,8 @@
-package com.loulan.service.impl;
+package com.loulan.common.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.loulan.service.BaseService;
+import com.loulan.common.service.BaseService;
 import com.loulan.vo.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.common.Mapper;

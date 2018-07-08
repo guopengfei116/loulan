@@ -1,7 +1,7 @@
 package com.loulan.sellergoods.service;
 
 import com.loulan.pojo.TbSpecification;
-import com.loulan.service.BaseService;
+import com.loulan.common.service.BaseService;
 import com.loulan.vo.Specification;
 
 import java.util.List;

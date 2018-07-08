@@ -1,8 +1,7 @@
 package com.loulan.sellergoods.service;
 
 import com.loulan.pojo.TbBrand;
-import com.loulan.service.BaseService;
-import com.loulan.vo.PageResult;
+import com.loulan.common.service.BaseService;
 
 import java.util.List;
 import java.util.Map;
