@@ -17,6 +17,14 @@ public interface BaseService<T> {
     T findOne(Serializable id);
 
     /**
+     * 批量主键查询
+     *
+     * @param  ids  主键集合
+     * @return      实体集合
+     * */
+    List<T> findMore(Serializable[] ids);
+
+    /**
      * 查询所有
      *
      * @return 实体对象集合
@@ -117,4 +125,5 @@ public interface BaseService<T> {
      * @param ids 主键集合
      * */
     void deleteMore(Serializable[] ids);
+
 }

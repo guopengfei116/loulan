@@ -17,5 +17,16 @@
             <groupId>fastdfs_client</groupId>
             <artifactId>fastdfs_client</artifactId>
         </dependency>
+
+        <!-- redis客户端与spring封装 -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+        </dependency>
     </dependencies>
+
 </project>

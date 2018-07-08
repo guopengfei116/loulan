@@ -45,6 +45,23 @@ public class BaseServiceImpl<T> implements BaseService<T> {
     }
 
     /**
+     * 批量主键查询
+     *
+     * @param  ids  主键集合
+     * @return      实体集合
+     * */
+    @Override
+    public List<T> findMore(Serializable[] ids) {
+        Example example = new Example(tClass);
+        Example.Criteria criteria = example.createCriteria();
+
+        criteria.andIn(primaryKeyName, Arrays.asList(ids));
+        mapper.deleteByExample(example);
+
+        return mapper.selectByExample(example);
+    }
+
+    /**
      * 查询所有
      *
      * @return 实体对象集合
