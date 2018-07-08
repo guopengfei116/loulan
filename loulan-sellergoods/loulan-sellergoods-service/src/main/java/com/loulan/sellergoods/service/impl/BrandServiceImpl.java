@@ -28,6 +28,7 @@ public class BrandServiceImpl extends BaseServiceImpl<TbBrand> implements BrandS
      * @param  t     实体对象，封装了查询条件
      * @return       分页实体对象
      */
+    @Override
     public PageResult findPageByWhere(Integer page, Integer size, TbBrand t) {
         /*
         * 1. 创建条件对象

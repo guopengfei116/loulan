@@ -17,6 +17,7 @@
         <module>loulan-shop-web</module>
         <module>loulan-content</module>
         <module>loulan-protal-web</module>
+        <module>loulan-content-web</module>
     </modules>
     <packaging>pom</packaging>
 
