@@ -26,18 +26,20 @@ public class ItemCatController {
     }
 
     /**
-     * 分页条件查询
+     * 通过父分类Id查询子分类
      *
-     * @param  page  页码
-     * @param  size  页大小
-     * @param  t     实体对象，封装了name与parentId
-     * @return       分页实体对象
+     * @param  page      页码
+     * @param  size      页大小
+     * @param  parentId  父分类Id
+     * @return           分页实体对象
      * */
-    @GetMapping("/findPageByWhere")
-    public PageResult findPageByWhere(@RequestParam(defaultValue = "1") Integer page,
-                                      @RequestParam(defaultValue = "10") Integer size,
-                                      @RequestBody(required = false) TbItemCat t) {
-        return itemCatService.findPageByWhere(page, size, t);
+    @GetMapping("/findByParentId")
+    public PageResult findByParentId(@RequestParam(defaultValue = "1") Integer page,
+                                     @RequestParam(defaultValue = "10") Integer size,
+                                     @RequestParam(defaultValue = "0") Long parentId) {
+        TbItemCat itemCat = new TbItemCat();
+        itemCat.setParentId(parentId);
+        return itemCatService.findPageByWhere(page, size, itemCat);
     }
 
     /**
