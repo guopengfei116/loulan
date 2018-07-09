@@ -36,14 +36,16 @@ public class SellerServiceImpl extends BaseServiceImpl<TbSeller> implements Sell
         Example example = new Example(TbSeller.class);
         Example.Criteria criteria = example.createCriteria();
 
-        if (!StringUtils.isEmpty(t.getName())) {
-            criteria.andLike("name", "%" + t.getName() + "%");
-        }
-        if (!StringUtils.isEmpty(t.getNickName())) {
-            criteria.andLike("nickName", "%" + t.getNickName() + "%");
-        }
-        if (!StringUtils.isEmpty(t.getStatus())) {
-            criteria.andEqualTo("status", t.getStatus());
+        if(t != null) {
+            if (!StringUtils.isEmpty(t.getName())) {
+                criteria.andLike("name", "%" + t.getName() + "%");
+            }
+            if (!StringUtils.isEmpty(t.getNickName())) {
+                criteria.andLike("nickName", "%" + t.getNickName() + "%");
+            }
+            if (!StringUtils.isEmpty(t.getStatus())) {
+                criteria.andEqualTo("status", t.getStatus());
+            }
         }
 
         return super.findPageByWhere(page, size, example);

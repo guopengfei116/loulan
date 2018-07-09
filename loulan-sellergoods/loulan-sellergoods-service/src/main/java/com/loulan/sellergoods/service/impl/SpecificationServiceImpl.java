@@ -73,8 +73,10 @@ public class SpecificationServiceImpl extends BaseServiceImpl<TbSpecification> i
         Example example = new Example(TbSpecification.class);
         Example.Criteria criteria = example.createCriteria();
 
-        if(!StringUtils.isEmpty(t.getSpecName())) {
-            criteria.andLike("specName", "%" + t.getSpecName() + "%");
+        if(t != null) {
+            if(!StringUtils.isEmpty(t.getSpecName())) {
+                criteria.andLike("specName", "%" + t.getSpecName() + "%");
+            }
         }
 
         return super.findPageByWhere(page, size, example);

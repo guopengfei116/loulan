@@ -38,11 +38,13 @@ public class ItemCatServiceImpl extends BaseServiceImpl<TbItemCat> implements It
         Example example = new Example(TbItemCat.class);
         Example.Criteria criteria = example.createCriteria();
 
-        if(t.getParentId() != null) {
-            criteria.andEqualTo("parentId", t.getParentId());
-        }
-        if(!StringUtils.isEmpty(t.getName())) {
-            criteria.andLike("name", "%" + t.getName() + "%");
+        if(t != null) {
+            if(t.getParentId() != null) {
+                criteria.andEqualTo("parentId", t.getParentId());
+            }
+            if(!StringUtils.isEmpty(t.getName())) {
+                criteria.andLike("name", "%" + t.getName() + "%");
+            }
         }
 
         return super.findPageByWhere(page, size, example);

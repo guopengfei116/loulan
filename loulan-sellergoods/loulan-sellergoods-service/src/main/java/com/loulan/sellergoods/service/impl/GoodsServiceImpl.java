@@ -114,14 +114,16 @@ public class GoodsServiceImpl extends BaseServiceImpl<TbGoods> implements GoodsS
 
         criteria.andNotEqualTo("isDelete", "1");
 
-        if(!StringUtils.isEmpty(t.getAuditStatus())) {
-            criteria.andEqualTo("auditStatus", t.getAuditStatus());
-        }
-        if(!StringUtils.isEmpty(t.getSellerId())) {
-            criteria.andEqualTo("sellerId", t.getSellerId());
-        }
-        if(!StringUtils.isEmpty(t.getGoodsName())) {
-            criteria.andLike("goodsName", "%" + t.getGoodsName() + "%");
+        if(t != null) {
+            if(!StringUtils.isEmpty(t.getAuditStatus())) {
+                criteria.andEqualTo("auditStatus", t.getAuditStatus());
+            }
+            if(!StringUtils.isEmpty(t.getSellerId())) {
+                criteria.andEqualTo("sellerId", t.getSellerId());
+            }
+            if(!StringUtils.isEmpty(t.getGoodsName())) {
+                criteria.andLike("goodsName", "%" + t.getGoodsName() + "%");
+            }
         }
 
         return super.findPageByWhere(page, size, example);

@@ -37,8 +37,10 @@ public class TypeTemplateServiceImpl extends BaseServiceImpl<TbTypeTemplate> imp
         Example example = new Example(TbTypeTemplate.class);
         Example.Criteria criteria = example.createCriteria();
 
-        if(!StringUtils.isEmpty(t.getName())) {
-            criteria.andLike("name", "%" + t.getName() + "%");
+        if(t != null) {
+            if(!StringUtils.isEmpty(t.getName())) {
+                criteria.andLike("name", "%" + t.getName() + "%");
+            }
         }
 
         return super.findPageByWhere(page, size, example);
