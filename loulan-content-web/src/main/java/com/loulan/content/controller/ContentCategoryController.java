@@ -16,19 +16,13 @@ public class ContentCategoryController {
     @Reference
     private ContentCategoryService contentCategoryService;
 
-    /**
-     * 主键查询
-     *
-     * @param  id  主键
-     * @return     实体对象
-     * */
     @GetMapping("/{id}")
     public TbContentCategory findOne(@PathVariable("id") Long id) {
         return contentCategoryService.findOne(id);
     }
 
     /**
-     * 分页sql条件查询，根据
+     * 分页sql条件查询，根据分类名称搜索
      *
      * @param  page          页码
      * @param  size          页大小
@@ -44,12 +38,7 @@ public class ContentCategoryController {
         return contentCategoryService.findPageByWhere(page, size, category);
     }
 
-    /**
-     * 添加
-     *
-     * @param  t  实体对象
-     * */
-    @PutMapping("/add")
+    @PutMapping
     public HttpResult add(TbContentCategory t) {
         try {
             contentCategoryService.add(t);
@@ -61,12 +50,7 @@ public class ContentCategoryController {
         return HttpResult.fail("添加失败");
     }
 
-    /**
-     * 修改
-     *
-     * @param  t  实体对象
-     * */
-    @PostMapping("/update")
+    @PostMapping
     public HttpResult update(TbContentCategory t) {
         try {
             contentCategoryService.update(t);
@@ -78,11 +62,6 @@ public class ContentCategoryController {
         return HttpResult.fail("修改失败");
     }
 
-    /**
-     * 批量删除
-     *
-     * @param  ids  主键集合
-     * */
     @DeleteMapping("/{ids}")
     public HttpResult deleteMore(@PathVariable("ids") Serializable[] ids) {
         try {

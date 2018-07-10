@@ -16,12 +16,6 @@ public class ContentController {
     @Reference
     private ContentService contentService;
 
-    /**
-     * 主键查询
-     *
-     * @param  id  主键
-     * @return     实体对象
-     * */
     @GetMapping("/{id}")
     public TbContent findOne(@PathVariable("id") Long id) {
         return contentService.findOne(id);
@@ -37,12 +31,7 @@ public class ContentController {
         return contentService.findByCategoryId(categoryId);
     }
 
-    /**
-     * 添加新广告，删除新广告对应分类下的旧有缓存
-     *
-     * @param  t  内容实体对象
-     * */
-    @PutMapping("/add")
+    @PutMapping
     public HttpResult add(TbContent t) {
         try {
             contentService.add(t);
@@ -54,12 +43,7 @@ public class ContentController {
         return HttpResult.fail("添加失败");
     }
 
-    /**
-     * 更新广告，删除旧缓存
-     *
-     * @param  t  内容实体对象
-     * */
-    @PostMapping("/update")
+    @PostMapping
     public HttpResult update(TbContent t) {
         try {
             contentService.update(t);
@@ -71,11 +55,6 @@ public class ContentController {
         return HttpResult.fail("修改失败");
     }
 
-    /**
-     * 批量删除广告，清除缓存
-     *
-     * @param  ids  主键集合
-     * */
     @DeleteMapping("/{ids}")
     public HttpResult deleteMore(@PathVariable("ids") Serializable[] ids) {
         try {

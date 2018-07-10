@@ -22,30 +22,37 @@ public class GoodsController {
      * @param  id  主键
      * @return     复合实体对象，包含商品SPU，商品详细，商品SKU集合
      * */
-    @GetMapping("/findOne")
-    public Goods findOne(Long id) {
+    @GetMapping("/{id}")
+    public Goods findOne(@PathVariable Long id) {
         // 只能查询商家自己的商品
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
         return goodsService.findOne(id, sellerId);
     }
 
     /**
-     * 分页sql条件查询，只查询spu
+     * 分页sql条件查询，只查询spu，且只能查询自家的商品
      *
-     * @param  page  页码
-     * @param  size  页大小
-     * @param  t     实体对象，封装了查询条件
-     * @return       分页实体对象
+     * @param  page         页码
+     * @param  size         页大小
+     * @param  auditStatus  商品状态
+     * @param  goodsName    商品名称
+     * @return              分页实体对象
      */
-    @PostMapping("/findPageByWhere")
+    @GetMapping("/findPageByWhere")
     public PageResult findPageByWhere(@RequestParam(defaultValue = "1") Integer page,
                                       @RequestParam(defaultValue = "10") Integer size,
-                                      @RequestBody(required = false) TbGoods t) {
-        // 只能查询商家自己的商品
-        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
-        t.setSellerId(sellerId);
+                                      @RequestParam(required = false) String auditStatus,
+                                      @RequestParam(required = false) String goodsName) {
 
-        return goodsService.findPageByWhere(page, size, t);
+        // 获取商家ID
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        TbGoods goods = new TbGoods();
+        goods.setAuditStatus(auditStatus);
+        goods.setSellerId(sellerId);
+        goods.setGoodsName(goodsName);
+
+        return goodsService.findPageByWhere(page, size, goods);
     }
 
     /**
@@ -54,7 +61,7 @@ public class GoodsController {
      * @param  t  复合实体对象，包含商品SPU，商品详细，商品SKU集合
      * @return    执行结果对象
      */
-    @PutMapping("/add")
+    @PutMapping
     public HttpResult add(@RequestBody Goods t) {
         HttpResult httpResult;
 
@@ -78,7 +85,7 @@ public class GoodsController {
      * @param  t  复合实体对象，包含商品SPU，商品详细，商品SKU集合
      * @return    执行结果对象
      */
-    @PostMapping("/update")
+    @PostMapping
     public HttpResult update(Goods t) {
         HttpResult httpResult;
 
@@ -100,8 +107,8 @@ public class GoodsController {
      * @param  ids  主键集合
      * @return      执行结果对象
      */
-    @PostMapping("/updateMoreStatus")
-    public HttpResult updateMoreStatus(@RequestBody TbGoods t, @RequestParam Long[] ids) {
+    @PostMapping("/updateMoreStatus/{ids}")
+    public HttpResult updateMoreStatus(@RequestBody TbGoods t, @PathVariable Long[] ids) {
         HttpResult httpResult;
 
         try {
@@ -122,8 +129,8 @@ public class GoodsController {
      * @param  ids  主键集合
      * @return      执行结果对象
      * */
-    @DeleteMapping("deleteMore")
-    public HttpResult deleteMore(@RequestAttribute Long[] ids) {
+    @DeleteMapping("/{ids}")
+    public HttpResult deleteMore(@PathVariable Long[] ids) {
         HttpResult httpResult;
 
         try {
